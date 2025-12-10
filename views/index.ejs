@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Habbus - Bot Premium</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="snow-container">
+        <% for(let i=0; i<50; i++) { %>
+            <div class="snow"></div>
+        <% } %>
+    </div>
+
+    <nav>
+        <a href="/" class="logo-container">
+            <img src="/images/logo_navidad.png" alt="Habbus Bot Logo">
+        </a>
+
+        <div class="nav-actions">
+            <a href="#" class="btn-premium">
+                <i class="fa-solid fa-crown"></i> Habbus Premium
+            </a>
+            <% if (user) { %>
+                <a href="/dashboard" class="btn-red">
+                    <i class="fa-solid fa-user-gear"></i> Panel
+                </a>
+            <% } else { %>
+                <a href="/auth/discord" class="btn-red">
+                    Iniciar Sesión
+                </a>
+            <% } %>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>El espíritu navideño <br> <span class="highlight">en tu servidor.</span></h1>
+            <p>Gestiona tu comunidad, da bienvenidas cálidas y diviértete con el sistema más avanzado y festivo de Discord.</p>
+            
+            <div class="hero-btns">
+                <% if (!user) { %>
+                    <a href="/auth/discord" class="btn-red btn-large">
+                        <i class="fa-solid fa-rocket"></i> Empezar Ahora
+                    </a>
+                <% } else { %>
+                    <a href="/dashboard" class="btn-red btn-large">
+                        <i class="fa-solid fa-gear"></i> Gestionar Bot
+                    </a>
+                <% } %>
+
+                <a href="/invite" target="_blank" class="btn-invite">
+                    <i class="fa-brands fa-discord"></i> Invitar Bot
+                </a>
+            </div>
+        </div>
+
+        <div class="card-wrapper">
+            <div class="premium-card">
+                <div class="glow-effect"></div>
+                <img src="/images/logo_navidad.png" alt="Logo Habbus" class="card-logo">
+                <div class="card-content">
+                    <h2>Habbus Premium</h2>
+                    <p>Sirviendo a la comunidad</p>
+                    <div class="badge">🔥 Popular</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="stats-strip">
+        <div class="stat-item">
+            <i class="fa-solid fa-server"></i>
+            <h3>+100</h3>
+            <p>Servidores</p>
+        </div>
+        <div class="stat-item">
+            <i class="fa-solid fa-users"></i>
+            <h3>+50K</h3>
+            <p>Usuarios</p>
+        </div>
+        <div class="stat-item">
+            <i class="fa-solid fa-bolt"></i>
+            <h3>24/7</h3>
+            <p>Uptime</p>
+        </div>
+        <div class="stat-item">
+            <i class="fa-solid fa-star"></i>
+            <h3>4.9</h3>
+            <p>Valoración</p>
+        </div>
+    </section>
+
+    <section class="features-section">
+        <h2 class="section-title">¿Por qué elegir <span style="color: var(--primary-red);">Habbus?</span></h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="icon-box"><i class="fa-solid fa-shield-halved"></i></div>
+                <h3>Moderación Segura</h3>
+                <p>Protege tu servidor de raids y spam con nuestro sistema avanzado de auto-moderación inteligente.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon-box"><i class="fa-solid fa-gift"></i></div>
+                <h3>Eventos Navideños</h3>
+                <p>Sorteos automáticos, calendarios de adviento y regalos sorpresa para mantener activa tu comunidad.</p>
+            </div>
+            <div class="feature-card">
+                <div class="icon-box"><i class="fa-solid fa-music"></i></div>
+                <h3>Música Alta Calidad</h3>
+                <p>Reproduce tus villancicos y canciones favoritas sin lag, con filtros de audio y control total.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-left">
+            <h4>Habbus Bot © 2025</h4>
+            <p>Creado por <b>Maikol Romero</b></p>
+        </div>
+        <div class="social-icons">
+            <a href="#" class="social-link"><i class="fa-brands fa-discord"></i></a>
+            <a href="#" class="social-link"><i class="fa-brands fa-facebook"></i></a>
+            <a href="#" class="social-link"><i class="fa-brands fa-instagram"></i></a>
+        </div>
+    </footer>
+
+</body>
+</html>

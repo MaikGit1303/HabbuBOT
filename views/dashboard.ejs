@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Habbus</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fira+Code:wght@500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="snow-container"></div>
+
+    <nav class="top-nav">
+        <div class="nav-left">
+            <button id="sidebarToggle" class="toggle-btn">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+            <a href="/" class="brand">
+                <img src="/images/logo_navidad.png" alt="Logo Habbus">
+            </a>
+            <div class="status-console">
+                <span class="status-dot"></span>
+                <span class="console-text">SYSTEM: <span style="color: #43b581;">ONLINE</span></span>
+            </div>
+        </div>
+
+        <div class="nav-right">
+            <a href="/invite" target="_blank" class="nav-invite-btn">
+                <i class="fa-solid fa-plus"></i> Invitar
+            </a>
+
+            <div class="server-dropdown-container">
+                <div class="server-selector" onclick="toggleServerMenu()">
+                    <img id="currentServerIcon" src="https://cdn.discordapp.com/embed/avatars/0.png" class="server-icon-small">
+                    <span id="currentServerName">Cargando...</span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                
+                <div id="serverMenu" class="server-list-dropdown">
+                    <% if (typeof servers !== 'undefined' && servers.length > 0) { %>
+                        <% servers.forEach((guild) => { %>
+                            <div class="server-option" 
+                                 data-id="<%= guild.id %>"
+                                 data-name="<%= guild.name %>"
+                                 data-icon="<%= guild.icon ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png` : `https://cdn.discordapp.com/embed/avatars/0.png` %>"
+                                 onclick="selectServer('<%= guild.id %>', '<%= guild.name %>', this.getAttribute('data-icon'))">
+                                <img src="<%= guild.icon ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png` : `https://cdn.discordapp.com/embed/avatars/0.png` %>">
+                                <span><%= guild.name %></span>
+                            </div>
+                        <% }) %>
+                    <% } else { %>
+                        <div class="server-option" style="cursor: default;"><span>No administras ningún servidor</span></div>
+                    <% } %>
+                </div>
+            </div>
+
+            <a href="#" class="nav-premium-btn">
+                <i class="fa-solid fa-crown"></i> Premium
+            </a>
+
+            <div class="user-dropdown">
+                <div class="user-info-text">
+                    <span class="username"><%= user.username %></span>
+                    <span class="user-role">Administrador</span>
+                </div>
+                <img src="https://cdn.discordapp.com/avatars/<%= user.id %>/<%= user.avatar %>.png" alt="Avatar">
+                <a href="/logout" class="logout-btn" title="Cerrar Sesión">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="layout-wrapper">
+        
+        <aside class="sidebar" id="sidebar">
+            <div class="menu-section">
+                <div class="menu-item active" onclick="openTab(event, 'panel')">
+                    <i class="fa-solid fa-border-all"></i>
+                    <span class="link-text">Panel de control</span>
+                </div>
+                
+                <span class="menu-header" style="margin-top: 15px;">CONFIGURACIÓN</span>
+                <div class="menu-item" onclick="openTab(event, 'general')">
+                    <i class="fa-solid fa-sliders"></i>
+                    <span class="link-text">General</span>
+                </div>
+                <div class="menu-item" onclick="openTab(event, 'bienvenida')">
+                    <i class="fa-solid fa-language"></i>
+                    <span class="link-text">Bienvenida</span>
+                </div>
+            </div>
+
+            <div class="menu-section">
+                <span class="menu-header">MÓDULOS</span>
+                <div class="menu-item" onclick="openTab(event, 'construccion')">
+                    <i class="fa-solid fa-gavel"></i>
+                    <span class="link-text">Moderación</span>
+                </div>
+                <div class="menu-item" onclick="openTab(event, 'construccion')">
+                    <i class="fa-solid fa-music"></i>
+                    <span class="link-text">Música</span>
+                </div>
+                <div class="menu-item" onclick="openTab(event, 'construccion')">
+                    <i class="fa-solid fa-chart-pie"></i>
+                    <span class="link-text">Estadísticas</span>
+                </div>
+            </div>
+
+            <div class="menu-footer">
+                <a href="/" class="menu-item back-item">
+                    <i class="fa-solid fa-arrow-left"></i>
+                    <span class="link-text">Volver al Inicio</span>
+                </a>
+            </div>
+        </aside>
+
+        <main class="content-area">
+            <form id="configForm" action="/save-config" method="POST">
+                <input type="hidden" name="guildId" id="guildIdInput" value="">
+
+                <div id="panel" class="tab-content active">
+                    
+                    <div class="content-header">
+                        <h1>Panel de Control</h1>
+                        <p>Resumen y gestión rápida de módulos.</p>
+                    </div>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <i class="fa-solid fa-signal" style="color: #43b581;"></i>
+                            <div><h3><%= stats.status %></h3><span>Estado</span></div>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fa-solid fa-server" style="color: #5865F2;"></i>
+                            <div><h3><%= stats.servers %></h3><span>Servidores</span></div>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fa-solid fa-bolt" style="color: #ffc107;"></i>
+                            <div><h3><%= stats.ping %>ms</h3><span>Latencia</span></div>
+                        </div>
+                    </div>
+
+                    <hr class="divider">
+
+                    <h3 class="section-title">Módulos del Servidor</h3>
+                    
+                    <div class="modules-grid">
+                        <div class="module-card">
+                            <div class="module-header">
+                                <div class="module-icon blue-icon"><i class="fa-solid fa-hand-spock"></i></div>
+                                <span class="premium-badge"><i class="fa-solid fa-crown"></i> Premium</span>
+                            </div>
+                            <h4>Bienvenidas</h4>
+                            <p>Envía mensajes y asigna roles automáticamente a los nuevos miembros.</p>
+                            <button type="button" class="btn-module" onclick="openTab(null, 'bienvenida')">Configurar</button>
+                        </div>
+
+                        <div class="module-card">
+                            <div class="module-header"><div class="module-icon red-icon"><i class="fa-solid fa-gavel"></i></div></div>
+                            <h4>Moderación</h4>
+                            <p>Mantén tu servidor seguro con comandos de ban, kick y mute automático.</p>
+                            <button type="button" class="btn-module active"><i class="fa-solid fa-check"></i> Activo</button>
+                        </div>
+
+                        <div class="module-card">
+                            <div class="module-header">
+                                <div class="module-icon yellow-icon"><i class="fa-solid fa-trophy"></i></div>
+                                <span class="premium-badge"><i class="fa-solid fa-crown"></i> Premium</span>
+                            </div>
+                            <h4>Niveles y XP</h4>
+                            <p>Sistema de ranking para premiar a los usuarios más activos del chat.</p>
+                            <button type="button" class="btn-module">+ Habilitar</button>
+                        </div>
+
+                        <div class="module-card">
+                            <div class="module-header"><div class="module-icon purple-icon"><i class="fa-solid fa-music"></i></div></div>
+                            <h4>Música 24/7</h4>
+                            <p>Reproduce canciones de alta calidad sin interrupciones en canales de voz.</p>
+                            <button type="button" class="btn-module">+ Habilitar</button>
+                        </div>
+
+                        <div class="module-card">
+                            <div class="module-header"><div class="module-icon green-icon"><i class="fa-solid fa-ticket"></i></div></div>
+                            <h4>Tickets Soporte</h4>
+                            <p>Permite a los usuarios abrir canales privados para contactar al staff.</p>
+                            <button type="button" class="btn-module">+ Habilitar</button>
+                        </div>
+
+                        <div class="module-card">
+                            <div class="module-header"><div class="module-icon cyan-icon"><i class="fa-solid fa-gift"></i></div></div>
+                            <h4>Sorteos</h4>
+                            <p>Organiza rifas y premios automáticos para tu comunidad.</p>
+                            <button type="button" class="btn-module">+ Habilitar</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="general" class="tab-content" style="display: none;">
+                    <div class="content-header">
+                        <h1>Configuración General</h1>
+                        <p>Ajustes básicos del bot.</p>
+                    </div>
+                    <div class="settings-card">
+                        <div class="setting-row">
+                            <div class="setting-info">
+                                <label>Prefijo del Bot</label>
+                                <span class="desc">Símbolo para ejecutar comandos.</span>
+                            </div>
+                            <div class="setting-input">
+                                <input type="text" name="prefix" value="<%= config.prefix %>" class="form-input change-detect">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="bienvenida" class="tab-content" style="display: none;">
+                    <div class="content-header">
+                        <h1>Sistema de Bienvenida</h1>
+                        <p>Personaliza el mensaje para los nuevos usuarios.</p>
+                    </div>
+                    <div class="settings-card">
+                        <div class="setting-row">
+                            <div class="setting-info">
+                                <label>Mensaje de Bienvenida</label>
+                                <span class="desc">Usa <code>{user}</code> para mencionar.</span>
+                            </div>
+                            <div class="setting-input">
+                                <textarea name="welcomeMessage" rows="5" class="form-input change-detect"><%= config.welcomeMessage %></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="construccion" class="tab-content" style="display: none; text-align: center; padding-top: 50px;">
+                    <i class="fa-solid fa-person-digging" style="font-size: 4rem; color: rgba(255,255,255,0.2); margin-bottom: 20px;"></i>
+                    <h2>Próximamente</h2>
+                </div>
+
+                <div id="saveBar" class="floating-save-bar">
+                    <span>¡Tienes cambios sin guardar!</span>
+                    <button type="submit" class="btn-save">Guardar Cambios</button>
+                </div>
+            </form>
+        </main>
+    </div>
+
+    <div id="successToast" class="success-toast">
+        <i class="fa-solid fa-check-circle"></i> Cambios guardados correctamente
+    </div>
+
+    <script>
+        // 1. NIEVE GENERADA POR SCRIPT (SOLUCIÓN AL ERROR ROJO)
+        const snowContainer = document.querySelector('.snow-container');
+        if(snowContainer) {
+            for(let i = 0; i < 50; i++) {
+                const div = document.createElement('div');
+                div.className = 'snow';
+                // Generamos los valores aleatorios aquí, no en el HTML
+                div.style.left = Math.random() * 100 + '%';
+                div.style.animationDuration = (Math.random() * 5 + 5) + 's';
+                div.style.opacity = Math.random();
+                snowContainer.appendChild(div);
+            }
+        }
+
+        // 2. Pestañas
+        function openTab(evt, tabName) {
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(div => { div.style.display = 'none'; div.classList.remove('active-anim'); });
+            const menuItems = document.querySelectorAll('.menu-item');
+            menuItems.forEach(item => item.classList.remove('active'));
+            
+            const selectedTab = document.getElementById(tabName);
+            if(selectedTab) {
+                selectedTab.style.display = 'block';
+                setTimeout(() => selectedTab.classList.add("active-anim"), 10);
+            }
+            if(evt) evt.currentTarget.classList.add('active');
+        }
+
+        document.getElementById('sidebarToggle').addEventListener('click', () => {
+            document.getElementById('sidebar').classList.toggle('collapsed');
+        });
+
+        // 3. Selector Servidores
+        const serverMenu = document.getElementById('serverMenu');
+        const guildInput = document.getElementById('guildIdInput');
+        function toggleServerMenu() { serverMenu.classList.toggle('show'); }
+        function selectServer(id, name, iconUrl) {
+            document.getElementById('currentServerName').textContent = name;
+            document.getElementById('currentServerIcon').src = iconUrl;
+            guildInput.value = id;
+            serverMenu.classList.remove('show');
+        }
+        window.addEventListener('DOMContentLoaded', () => {
+            const firstServer = document.querySelector('.server-option');
+            if (firstServer) selectServer(firstServer.getAttribute('data-id'), firstServer.getAttribute('data-name'), firstServer.getAttribute('data-icon'));
+            else document.getElementById('currentServerName').textContent = "Sin servidores";
+        });
+        window.onclick = function(event) { if (!event.target.closest('.server-dropdown-container')) serverMenu.classList.remove('show'); }
+
+        // 4. Guardado
+        const form = document.getElementById('configForm');
+        const saveBar = document.getElementById('saveBar');
+        const inputs = document.querySelectorAll('.change-detect');
+        let initialValues = {};
+        inputs.forEach(input => {
+            initialValues[input.name] = input.value;
+            input.addEventListener('input', () => {
+                let hasChanges = false;
+                inputs.forEach(i => { if (i.value !== initialValues[i.name]) hasChanges = true; });
+                if (hasChanges) saveBar.classList.add('show'); else saveBar.classList.remove('show');
+            });
+        });
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const formData = new URLSearchParams(new FormData(form));
+            fetch('/save-config', { method: 'POST', body: formData }).then(response => {
+                if (response.ok) {
+                    saveBar.classList.remove('show');
+                    inputs.forEach(input => initialValues[input.name] = input.value);
+                    const toast = document.getElementById('successToast');
+                    toast.classList.add('active');
+                    setTimeout(() => toast.classList.remove('active'), 3000);
+                }
+            }).catch(error => alert("Error"));
+        });
+    </script>
+</body>
+</html>
