@@ -1,4 +1,5 @@
-const { Client, GatewayIntentBits, Partials, REST, Routes, ActivityType } = require('discord.js');
+require('dotenv').config();
+const { Client, GatewayIntentBits, Partials, REST, Routes, ActivityType, ChannelType } = require('discord.js');
 const express = require('express');
 const session = require('express-session');
 const passport = require('passport');
@@ -7,34 +8,42 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const fs = require('fs');
 
-// --- 🔴 TUS DATOS REALES (LLENA ESTO OTRA VEZ) ---
-const CLIENT_ID = 'TU_CLIENT_ID_AQUI';       
-const CLIENT_SECRET = 'TU_CLIENT_SECRET_AQUI'; 
-const BOT_TOKEN = 'TU_TOKEN_DEL_BOT_AQUI';   
+// --- DATOS ---
+const CLIENT_ID = process.env.DISCORD_CLIENT_ID;       
+const CLIENT_SECRET = process.env.DISCORD_CLIENT_SECRET; 
+const BOT_TOKEN = process.env.DISCORD_BOT_TOKEN;
+const CALLBACK_URL = 'http://localhost:3000/auth/discord/callback';
 
-// --- CONFIGURACIÓN (settings.json) ---
+// --- CONFIGURACIÓN MULTI-SERVIDOR ---
 const settingsPath = path.join(__dirname, 'settings.json');
-let botConfig = {
-    welcomeMessage: "¡Bienvenido al servidor, {user}!",
-    prefix: "!"
-};
+let guildConfigs = {};
 
-// Cargar configuración
+// Cargar configs
 if (fs.existsSync(settingsPath)) {
-    try {
-        botConfig = JSON.parse(fs.readFileSync(settingsPath));
-    } catch (e) { console.error("Error cargando config."); }
+    try { guildConfigs = JSON.parse(fs.readFileSync(settingsPath)); } catch (e) { console.error("Error leyendo config"); }
 }
 
 function saveConfig() {
-    fs.writeFileSync(settingsPath, JSON.stringify(botConfig, null, 2));
+    fs.writeFileSync(settingsPath, JSON.stringify(guildConfigs, null, 2));
 }
 
-// --- COMANDOS ---
+// Obtener config de un server (o crear default)
+function getGuildConfig(guildId) {
+    if (!guildConfigs[guildId]) {
+        guildConfigs[guildId] = {
+            prefix: "!",
+            welcomeEnabled: false,
+            welcomeChannel: "",
+            welcomeMessage: "¡Bienvenido {user} a {server}!"
+        };
+    }
+    return guildConfigs[guildId];
+}
+
+// --- COMANDOS Y CLIENTE ---
 const commands = [
-    { name: 'ping', description: '🏓 Comprueba la latencia' },
-    { name: 'habbus', description: '🎄 Información sobre el bot' },
-    { name: 'bienvenida', description: '🧪 Prueba el mensaje de bienvenida' }
+    { name: 'ping', description: '🏓 Latencia' },
+    { name: 'habbus', description: '🎄 Info del bot' }
 ];
 
 const rest = new REST({ version: '10' }).setToken(BOT_TOKEN);
@@ -43,70 +52,51 @@ const client = new Client({
     partials: [Partials.Channel, Partials.Message]
 });
 
-// --- EVENTOS DEL BOT ---
 client.once('ready', async () => {
-    console.log(`🎄 HabbusBot conectado como ${client.user.tag}`);
-    try {
-        await rest.put(Routes.applicationCommands(CLIENT_ID), { body: commands });
-        console.log('✅ Comandos registrados.');
-    } catch (error) { console.error(error); }
-
-    // Estado Rotativo
-    const activities = [
-        { name: '🎄 Navidad en Habbus', type: ActivityType.Playing },
-        { name: '🎁 Repartiendo Regalos', type: ActivityType.Playing },
-        { name: '🛡️ Moderando', type: ActivityType.Watching },
-        { name: '💻 Dashboard', type: ActivityType.Watching }
-    ];
-    let i = 0;
-    setInterval(() => {
-        if(i >= activities.length) i = 0;
-        client.user.setPresence({ activities: [activities[i]], status: 'online' });
-        i++;
-    }, 10000);
+    console.log(`🎄 HabbusBot listo como ${client.user.tag}`);
+    try { await rest.put(Routes.applicationCommands(CLIENT_ID), { body: commands }); } catch (e) {}
+    client.user.setPresence({ activities: [{ name: '🎄 Navidad', type: ActivityType.Playing }], status: 'online' });
 });
 
-client.on('interactionCreate', async interaction => {
-    if (!interaction.isChatInputCommand()) return;
-    if (interaction.commandName === 'ping') await interaction.reply(`¡Pong! 🏓 ${client.ws.ping}ms`);
-    if (interaction.commandName === 'habbus') await interaction.reply('🎅 **HabbusBot** v1.0');
-    if (interaction.commandName === 'bienvenida') {
-        const msg = botConfig.welcomeMessage.replace('{user}', interaction.user.username);
-        await interaction.reply(`El mensaje es:\n> ${msg}`);
+// EVENTO DE BIENVENIDA REAL
+client.on('guildMemberAdd', member => {
+    const config = getGuildConfig(member.guild.id);
+    
+    // Si está activado y hay canal configurado
+    if (config.welcomeEnabled && config.welcomeChannel) {
+        const channel = member.guild.channels.cache.get(config.welcomeChannel);
+        if (channel) {
+            let msg = config.welcomeMessage
+                .replace('{user}', `<@${member.id}>`)
+                .replace('{server}', member.guild.name);
+            channel.send(msg);
+        }
     }
 });
 
-client.on('guildMemberAdd', member => {
-    const channel = member.guild.channels.cache.find(ch => ch.name === 'general' || ch.name === 'bienvenida');
-    if (channel) channel.send(botConfig.welcomeMessage.replace('{user}', member.user.username));
+// Comandos
+client.on('interactionCreate', async interaction => {
+    if (!interaction.isChatInputCommand()) return;
+    if (interaction.commandName === 'ping') await interaction.reply(`Pong! ${client.ws.ping}ms`);
 });
-
-// Anti-Crash
-process.on('unhandledRejection', (reason) => console.log(' [Anti-Crash]:', reason));
-process.on('uncaughtException', (err) => console.log(' [Anti-Crash]:', err));
 
 client.login(BOT_TOKEN);
 
-// --- SERVIDOR WEB ---
+// --- WEB DASHBOARD ---
 const app = express();
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(session({ secret: 'navidad_secreta', resave: false, saveUninitialized: false }));
-
+app.use(session({ secret: 'navidad', resave: false, saveUninitialized: false }));
 app.use(passport.initialize());
 app.use(passport.session());
 
 passport.serializeUser((user, done) => done(null, user));
 passport.deserializeUser((obj, done) => done(null, obj));
-
 passport.use(new DiscordStrategy({
-    clientID: CLIENT_ID,
-    clientSecret: CLIENT_SECRET,
-    callbackURL: CALLBACK_URL,
-    scope: ['identify', 'guilds'] // IMPORTANTE: Pide acceso a los servidores
-}, (accessToken, refreshToken, profile, done) => process.nextTick(() => done(null, profile))));
+    clientID: CLIENT_ID, clientSecret: CLIENT_SECRET, callbackURL: CALLBACK_URL, scope: ['identify', 'guilds']
+}, (a, r, p, d) => process.nextTick(() => d(null, p))));
 
 app.get('/', (req, res) => res.render('index', { user: req.user }));
 app.get('/auth/discord', passport.authenticate('discord'));
@@ -114,44 +104,64 @@ app.get('/auth/discord/callback', passport.authenticate('discord', { failureRedi
 app.get('/logout', (req, res) => { req.logout(() => res.redirect('/')); });
 app.get('/invite', (req, res) => res.redirect(`https://discord.com/api/oauth2/authorize?client_id=${CLIENT_ID}&permissions=8&scope=bot%20applications.commands`));
 
-// --- RUTA DASHBOARD (SOLUCIÓN LISTA VACÍA) ---
-app.get('/dashboard', (req, res) => {
+// RUTA DASHBOARD INTELIGENTE
+app.get('/dashboard', async (req, res) => {
     if (!req.isAuthenticated()) return res.redirect('/');
 
-    // 1. Obtener servidores del usuario (de la sesión)
     const userGuilds = req.user.guilds || [];
+    const adminServers = userGuilds.filter(g => (BigInt(g.permissions) & 0x8n) === 0x8n);
 
-    // 2. Filtrar donde es ADMINISTRADOR (Permiso 0x8)
-    // Usamos BigInt o parseInt para asegurar que la comparación funcione
-    const adminServers = userGuilds.filter(guild => {
-        const perms = parseInt(guild.permissions);
-        return (perms & 0x8) === 0x8;
-    });
+    // Detectar qué servidor está seleccionando el usuario (por URL ?guild=ID)
+    let selectedGuildId = req.query.guild;
+    let selectedGuild = null;
+    let channels = [];
 
-    // 3. Stats reales del bot
-    const botStats = {
-        servers: client.guilds.cache.size || 0,
-        users: client.guilds.cache.reduce((acc, guild) => acc + guild.memberCount, 0) || 0,
-        ping: Math.round(client.ws.ping) || 0,
-        status: 'En Línea'
-    };
+    // Si no hay ID en la URL, usamos el primero de la lista
+    if (!selectedGuildId && adminServers.length > 0) {
+        selectedGuildId = adminServers[0].id;
+    }
+
+    if (selectedGuildId) {
+        // Verificar que el bot esté en ese servidor para sacar canales
+        const guild = client.guilds.cache.get(selectedGuildId);
+        if (guild) {
+            // Obtener canales de texto
+            channels = guild.channels.cache
+                .filter(c => c.type === ChannelType.GuildText)
+                .map(c => ({ id: c.id, name: c.name }));
+            selectedGuild = adminServers.find(g => g.id === selectedGuildId);
+        }
+    }
+
+    // Obtener config específica de ese servidor
+    const config = getGuildConfig(selectedGuildId);
 
     res.render('dashboard', { 
         user: req.user, 
-        config: botConfig,
-        stats: botStats,
-        servers: adminServers // Enviamos la lista filtrada y segura
+        config: config, // Configuración de ESTE servidor
+        stats: { servers: client.guilds.cache.size, ping: Math.round(client.ws.ping), status: 'En Línea' },
+        servers: adminServers,
+        selectedGuildId: selectedGuildId, // Para que el frontend sepa cuál mostrar
+        channels: channels // Lista de canales para el selector
     });
 });
 
 app.post('/save-config', (req, res) => {
-    if (!req.isAuthenticated()) return res.status(403).send("No autorizado");
-    botConfig.prefix = req.body.prefix;
-    botConfig.welcomeMessage = req.body.welcomeMessage;
+    if (!req.isAuthenticated()) return res.status(403).send("No auth");
+    
+    const guildId = req.body.guildId;
+    if (!guildId) return res.status(400).send("Falta ID de servidor");
+
+    // Guardar en la "caja" de ese servidor específico
+    guildConfigs[guildId] = {
+        prefix: req.body.prefix,
+        welcomeEnabled: req.body.welcomeEnabled === 'on', // Checkbox
+        welcomeChannel: req.body.welcomeChannel,
+        welcomeMessage: req.body.welcomeMessage
+    };
+    
     saveConfig();
     res.sendStatus(200);
 });
 
-app.listen(3000, () => {
-    console.log('🌐 Dashboard web listo en http://localhost:3000');
-});
+app.listen(3000, () => console.log('🌐 Web lista'));
