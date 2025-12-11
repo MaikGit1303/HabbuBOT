@@ -14,29 +14,14 @@
 
     <% 
         let currentServer = { name: "Sin servidores", icon: "https://cdn.discordapp.com/embed/avatars/0.png", id: "" };
-        
-        // Si hay servidores en la lista
         if (typeof servers !== 'undefined' && servers.length > 0) {
-            // 1. Intentamos buscar el servidor seleccionado por ID
             if (typeof selectedGuildId !== 'undefined' && selectedGuildId) {
                 const found = servers.find(s => s.id === selectedGuildId);
-                if (found) {
-                    currentServer = { 
-                        name: found.name, 
-                        icon: found.icon ? `https://cdn.discordapp.com/icons/${found.id}/${found.icon}.png` : `https://cdn.discordapp.com/embed/avatars/0.png`,
-                        id: found.id
-                    };
-                }
+                if (found) currentServer = { name: found.name, icon: found.icon ? `https://cdn.discordapp.com/icons/${found.id}/${found.icon}.png` : `https://cdn.discordapp.com/embed/avatars/0.png`, id: found.id };
             } 
-            
-            // 2. Si no encontramos ninguno (o es la primera vez), usamos el PRIMERO de la lista
             if (!currentServer.id && servers.length > 0) {
                 const first = servers[0];
-                currentServer = { 
-                    name: first.name, 
-                    icon: first.icon ? `https://cdn.discordapp.com/icons/${first.id}/${first.icon}.png` : `https://cdn.discordapp.com/embed/avatars/0.png`,
-                    id: first.id
-                };
+                currentServer = { name: first.name, icon: first.icon ? `https://cdn.discordapp.com/icons/${first.id}/${first.icon}.png` : `https://cdn.discordapp.com/embed/avatars/0.png`, id: first.id };
             }
         }
     %>
@@ -47,26 +32,20 @@
         <div class="nav-left">
             <button id="sidebarToggle" class="toggle-btn"><i class="fa-solid fa-bars"></i></button>
             <a href="/" class="brand"><img src="/images/logo_navidad.png" alt="Habbus"></a>
-            <div class="status-console">
-                <span class="status-dot"></span><span class="console-text">SYSTEM: <span style="color: #43b581;">ONLINE</span></span>
-            </div>
+            <div class="status-console"><span class="status-dot"></span><span class="console-text">SYSTEM: <span style="color: #43b581;">ONLINE</span></span></div>
         </div>
-        
         <div class="nav-right">
             <a href="/invite" target="_blank" class="nav-invite-btn"><i class="fa-solid fa-plus"></i> Invitar</a>
-            
             <div class="server-dropdown-container">
                 <div class="server-selector" onclick="toggleServerMenu()">
                     <img id="currentServerIcon" src="<%= currentServer.icon %>" class="server-icon-small">
                     <span id="currentServerName"><%= currentServer.name %></span>
                     <i class="fa-solid fa-chevron-down"></i>
                 </div>
-                
                 <div id="serverMenu" class="server-list-dropdown">
                     <% if (typeof servers !== 'undefined' && servers.length > 0) { %>
                         <% servers.forEach((guild) => { %>
-                            <div class="server-option" 
-                                 onclick="selectServer('<%= guild.id %>')">
+                            <div class="server-option" onclick="selectServer('<%= guild.id %>')">
                                 <img src="<%= guild.icon ? `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png` : `https://cdn.discordapp.com/embed/avatars/0.png` %>">
                                 <span><%= guild.name %></span>
                             </div>
@@ -76,7 +55,6 @@
                     <% } %>
                 </div>
             </div>
-
             <a href="#" class="nav-premium-btn"><i class="fa-solid fa-crown"></i> Premium</a>
             <div class="user-dropdown">
                 <div class="user-info-text"><span class="username"><%= user.username %></span><span class="user-role">Admin</span></div>
@@ -87,7 +65,6 @@
     </nav>
 
     <div class="layout-wrapper">
-        
         <aside class="sidebar" id="sidebar">
             <div class="menu-section">
                 <div class="menu-item active" onclick="openTab(event, 'panel')"><i class="fa-solid fa-border-all"></i> <span class="link-text">Panel de control</span></div>
@@ -96,7 +73,6 @@
                 <div class="menu-item" onclick="openTab(event, 'premium')"><i class="fa-solid fa-crown" style="color: var(--gold);"></i> <span class="link-text">Premium</span></div>
                 <div class="menu-item" onclick="openTab(event, 'emojis')"><i class="fa-solid fa-icons"></i> <span class="link-text">Emojis</span></div>
             </div>
-
             <div class="menu-section">
                 <span class="menu-header">GESTIÓN DEL SERVIDOR</span>
                 <div class="menu-item" onclick="openTab(event, 'bienvenida')"><i class="fa-solid fa-hand-spock"></i> <span class="link-text">Bienvenidas</span></div>
@@ -106,7 +82,6 @@
                 <div class="menu-item" onclick="openTab(event, 'construccion')"><i class="fa-solid fa-user-check"></i> <span class="link-text">Verificación</span></div>
                 <div class="menu-item" onclick="openTab(event, 'construccion')"><i class="fa-solid fa-file-lines"></i> <span class="link-text">Registros</span></div>
             </div>
-
             <div class="menu-section">
                 <span class="menu-header">UTILIDADES</span>
                 <div class="menu-item" onclick="openTab(event, 'construccion')"><i class="fa-solid fa-id-card"></i> <span class="link-text">Roles Reacción</span></div>
@@ -117,7 +92,6 @@
                 <div class="menu-item" onclick="openTab(event, 'construccion')"><i class="fa-solid fa-user-plus"></i> <span class="link-text">Rastreador</span></div>
                 <div class="menu-item" onclick="openTab(event, 'construccion')"><i class="fa-solid fa-ticket"></i> <span class="link-text">Tickets</span></div>
             </div>
-
             <div class="menu-section">
                 <span class="menu-header">DIVERSIÓN Y COMUNIDAD</span>
                 <div class="menu-item" onclick="openTab(event, 'construccion')"><i class="fa-solid fa-bell"></i> <span class="link-text">Recordatorios</span></div>
@@ -126,7 +100,6 @@
                 <div class="menu-item" onclick="openTab(event, 'construccion')"><i class="fa-solid fa-trophy"></i> <span class="link-text">Niveles y XP</span></div>
                 <div class="menu-item" onclick="openTab(event, 'construccion')"><i class="fa-solid fa-music"></i> <span class="link-text">Música</span></div>
             </div>
-
             <div class="menu-section">
                 <span class="menu-header">EXTRAS</span>
                 <div class="menu-item" onclick="openTab(event, 'construccion')"><i class="fa-solid fa-coins"></i> <span class="link-text">Economía</span></div>
@@ -134,194 +107,117 @@
                 <div class="menu-item" onclick="openTab(event, 'construccion')"><i class="fa-solid fa-magnifying-glass"></i> <span class="link-text">Buscador</span></div>
                 <div class="menu-item" onclick="openTab(event, 'construccion')"><i class="fa-solid fa-circle-question"></i> <span class="link-text">Ayuda</span></div>
             </div>
-            
             <div class="menu-footer">
                 <a href="/" class="menu-item back-item"><i class="fa-solid fa-arrow-left"></i> <span class="link-text">Volver al Inicio</span></a>
             </div>
         </aside>
 
         <main class="content-area">
-            <form id="configForm" action="/save-config" method="POST">
+            <form id="configForm" action="/save-config" method="POST" enctype="multipart/form-data">
                 <input type="hidden" name="guildId" id="guildIdInput" value="<%= currentServer.id %>">
 
                 <div id="panel" class="tab-content active">
-                    <div class="content-header">
-                        <h1>Panel de Control</h1>
-                        <p>Estás gestionando: <strong><%= currentServer.name %></strong></p>
-                    </div>
-
+                    <div class="content-header"><h1>Panel de Control</h1><p>Gestiona los módulos de <strong><%= currentServer.name %></strong></p></div>
                     <div class="stats-grid">
                         <div class="stat-card"><i class="fa-solid fa-signal" style="color: #43b581;"></i><div><h3><%= stats.status %></h3><span>Estado</span></div></div>
                         <div class="stat-card"><i class="fa-solid fa-server" style="color: #5865F2;"></i><div><h3><%= stats.servers %></h3><span>Servidores</span></div></div>
                         <div class="stat-card"><i class="fa-solid fa-bolt" style="color: #ffc107;"></i><div><h3><%= stats.ping %>ms</h3><span>Latencia</span></div></div>
                     </div>
-
                     <hr class="divider">
-
                     <h3 class="section-title"><i class="fa-solid fa-server"></i> Gestión del Servidor</h3>
                     <div class="modules-grid">
-                        <div class="module-card">
-                            <div class="module-header"><div class="module-icon blue-icon"><i class="fa-solid fa-hand-spock"></i></div></div>
-                            <h4>Bienvenidas</h4><p>Configura mensajes de entrada y salida.</p>
-                            <button type="button" class="btn-module" onclick="openTab(null, 'bienvenida')">Configurar</button>
-                        </div>
-                        <div class="module-card">
-                            <div class="module-header"><div class="module-icon red-icon"><i class="fa-solid fa-gavel"></i></div></div>
-                            <h4>Moderación</h4><p>Sistema de ban, kick y mute.</p>
-                            <button type="button" class="btn-module">Configurar</button>
-                        </div>
-                        <div class="module-card">
-                            <div class="module-header"><div class="module-icon purple-icon"><i class="fa-solid fa-file-lines"></i></div></div>
-                            <h4>Registros</h4><p>Historial de cambios y auditoría.</p>
-                            <button type="button" class="btn-module">+ Habilitar</button>
-                        </div>
+                        <div class="module-card"><div class="module-header"><div class="module-icon blue-icon"><i class="fa-solid fa-hand-spock"></i></div></div><h4>Bienvenidas</h4><p>Configura mensajes de entrada.</p><button type="button" class="btn-module" onclick="openTab(null, 'bienvenida')">Configurar</button></div>
+                        <div class="module-card"><div class="module-header"><div class="module-icon cyan-icon"><i class="fa-solid fa-door-open"></i></div></div><h4>Canal Bienvenida</h4><p>Define dónde saluda el bot.</p><button type="button" class="btn-module" onclick="openTab(null, 'construccion')">Configurar</button></div>
+                        <div class="module-card"><div class="module-header"><div class="module-icon red-icon"><i class="fa-solid fa-gavel"></i></div></div><h4>Moderación</h4><p>Ban, kick, mute y automod.</p><button type="button" class="btn-module" onclick="openTab(null, 'construccion')">Configurar</button></div>
+                        <div class="module-card"><div class="module-header"><div class="module-icon yellow-icon"><i class="fa-solid fa-medal"></i></div></div><h4>Logros</h4><p>Medallas para usuarios.</p><button type="button" class="btn-module" onclick="openTab(null, 'construccion')">+ Habilitar</button></div>
+                        <div class="module-card"><div class="module-header"><div class="module-icon green-icon"><i class="fa-solid fa-user-check"></i></div></div><h4>Verificación</h4><p>Sistema de captcha.</p><button type="button" class="btn-module" onclick="openTab(null, 'construccion')">+ Habilitar</button></div>
+                        <div class="module-card"><div class="module-header"><div class="module-icon purple-icon"><i class="fa-solid fa-file-lines"></i></div></div><h4>Registros</h4><p>Logs de auditoría.</p><button type="button" class="btn-module" onclick="openTab(null, 'construccion')">+ Habilitar</button></div>
                     </div>
-
                     <h3 class="section-title"><i class="fa-solid fa-toolbox"></i> Utilidades</h3>
                     <div class="modules-grid">
-                        <div class="module-card">
-                            <div class="module-header"><div class="module-icon yellow-icon"><i class="fa-solid fa-id-card"></i></div></div>
-                            <h4>Roles Reacción</h4><p>Roles por clic en emoji.</p>
-                            <button type="button" class="btn-module" onclick="openTab(null, 'construccion')">Configurar</button>
-                        </div>
-                        <div class="module-card">
-                            <div class="module-header"><div class="module-icon cyan-icon"><i class="fa-solid fa-pen-to-square"></i></div></div>
-                            <h4>Embeds</h4><p>Mensajes visuales avanzados.</p>
-                            <button type="button" class="btn-module" onclick="openTab(null, 'construccion')">Crear</button>
-                        </div>
-                        <div class="module-card">
-                            <div class="module-header"><div class="module-icon red-icon"><i class="fa-solid fa-rss"></i></div></div>
-                            <h4>Alertas Sociales</h4><p>Notificaciones de YouTube/Twitch.</p>
-                            <button type="button" class="btn-module" onclick="openTab(null, 'construccion')">+ Habilitar</button>
-                        </div>
-                        <div class="module-card">
-                            <div class="module-header"><div class="module-icon blue-icon"><i class="fa-solid fa-robot"></i></div></div>
-                            <h4>Automatizaciones</h4><p>Respuestas auto y tareas.</p>
-                            <button type="button" class="btn-module" onclick="openTab(null, 'construccion')">+ Habilitar</button>
-                        </div>
-                        <div class="module-card">
-                            <div class="module-header"><div class="module-icon purple-icon"><i class="fa-solid fa-terminal"></i></div></div>
-                            <h4>Comandos Custom</h4><p>Crea tus propios comandos.</p>
-                            <button type="button" class="btn-module" onclick="openTab(null, 'construccion')">Crear</button>
-                        </div>
-                        <div class="module-card">
-                            <div class="module-header"><div class="module-icon green-icon"><i class="fa-solid fa-user-plus"></i></div></div>
-                            <h4>Rastreador</h4><p>Control de invitaciones.</p>
-                            <button type="button" class="btn-module" onclick="openTab(null, 'construccion')">+ Habilitar</button>
-                        </div>
-                        <div class="module-card">
-                            <div class="module-header"><div class="module-icon green-icon"><i class="fa-solid fa-ticket"></i></div></div>
-                            <h4>Tickets</h4><p>Soporte privado.</p>
-                            <button type="button" class="btn-module" onclick="openTab(null, 'construccion')">+ Habilitar</button>
-                        </div>
+                        <div class="module-card"><div class="module-header"><div class="module-icon yellow-icon"><i class="fa-solid fa-id-card"></i></div></div><h4>Roles Reacción</h4><p>Roles por clic en emoji.</p><button type="button" class="btn-module" onclick="openTab(null, 'construccion')">Configurar</button></div>
+                        <div class="module-card"><div class="module-header"><div class="module-icon cyan-icon"><i class="fa-solid fa-pen-to-square"></i></div></div><h4>Embeds</h4><p>Mensajes visuales avanzados.</p><button type="button" class="btn-module" onclick="openTab(null, 'construccion')">Crear</button></div>
+                        <div class="module-card"><div class="module-header"><div class="module-icon red-icon"><i class="fa-solid fa-rss"></i></div></div><h4>Alertas Sociales</h4><p>Notificaciones YouTube/Twitch.</p><button type="button" class="btn-module" onclick="openTab(null, 'construccion')">+ Habilitar</button></div>
+                        <div class="module-card"><div class="module-header"><div class="module-icon blue-icon"><i class="fa-solid fa-robot"></i></div></div><h4>Automatizaciones</h4><p>Respuestas auto y tareas.</p><button type="button" class="btn-module" onclick="openTab(null, 'construccion')">+ Habilitar</button></div>
+                        <div class="module-card"><div class="module-header"><div class="module-icon purple-icon"><i class="fa-solid fa-terminal"></i></div></div><h4>Comandos Custom</h4><p>Crea comandos propios.</p><button type="button" class="btn-module" onclick="openTab(null, 'construccion')">Crear</button></div>
+                        <div class="module-card"><div class="module-header"><div class="module-icon green-icon"><i class="fa-solid fa-user-plus"></i></div></div><h4>Rastreador</h4><p>Control de invitaciones.</p><button type="button" class="btn-module" onclick="openTab(null, 'construccion')">+ Habilitar</button></div>
+                        <div class="module-card"><div class="module-header"><div class="module-icon green-icon"><i class="fa-solid fa-ticket"></i></div></div><h4>Tickets</h4><p>Soporte privado.</p><button type="button" class="btn-module" onclick="openTab(null, 'construccion')">+ Habilitar</button></div>
                     </div>
-
                     <h3 class="section-title"><i class="fa-solid fa-gamepad"></i> Diversión</h3>
                     <div class="modules-grid">
-                        <div class="module-card">
-                            <div class="module-header"><div class="module-icon yellow-icon"><i class="fa-solid fa-icons"></i></div></div>
-                            <h4>Emojis</h4><p>Gestión de emojis del servidor.</p>
-                            <button type="button" class="btn-module" onclick="openTab(null, 'emojis')">Gestionar</button>
-                        </div>
-                        <div class="module-card">
-                            <div class="module-header"><div class="module-icon cyan-icon"><i class="fa-solid fa-bell"></i></div></div>
-                            <h4>Recordatorios</h4><p>Alarmas y avisos.</p>
-                            <button type="button" class="btn-module" onclick="openTab(null, 'construccion')">+ Habilitar</button>
-                        </div>
-                        <div class="module-card">
-                            <div class="module-header"><div class="module-icon red-icon"><i class="fa-solid fa-cake-candles"></i></div></div>
-                            <h4>Cumpleaños</h4><p>Felicitaciones automáticas.</p>
-                            <button type="button" class="btn-module" onclick="openTab(null, 'construccion')">+ Habilitar</button>
-                        </div>
-                        <div class="module-card">
-                            <div class="module-header"><div class="module-icon purple-icon"><i class="fa-solid fa-gift"></i></div></div>
-                            <h4>Sorteos</h4><p>Giveaways para la comunidad.</p>
-                            <button type="button" class="btn-module" onclick="openTab(null, 'construccion')">Crear</button>
-                        </div>
-                        <div class="module-card">
-                            <div class="module-header"><div class="module-icon yellow-icon"><i class="fa-solid fa-trophy"></i></div><span class="premium-badge">TOP</span></div>
-                            <h4>Niveles y XP</h4><p>Ranking de actividad.</p>
-                            <button type="button" class="btn-module" onclick="openTab(null, 'construccion')">+ Habilitar</button>
-                        </div>
-                        <div class="module-card">
-                            <div class="module-header"><div class="module-icon purple-icon"><i class="fa-solid fa-music"></i></div></div>
-                            <h4>Música</h4><p>Reproductor 24/7 de alta calidad.</p>
-                            <button type="button" class="btn-module" onclick="openTab(null, 'construccion')">+ Habilitar</button>
-                        </div>
+                        <div class="module-card"><div class="module-header"><div class="module-icon yellow-icon"><i class="fa-solid fa-icons"></i></div></div><h4>Emojis</h4><p>Gestión de emojis.</p><button type="button" class="btn-module" onclick="openTab(null, 'emojis')">Gestionar</button></div>
+                        <div class="module-card"><div class="module-header"><div class="module-icon cyan-icon"><i class="fa-solid fa-bell"></i></div></div><h4>Recordatorios</h4><p>Alarmas y avisos.</p><button type="button" class="btn-module" onclick="openTab(null, 'construccion')">+ Habilitar</button></div>
+                        <div class="module-card"><div class="module-header"><div class="module-icon red-icon"><i class="fa-solid fa-cake-candles"></i></div></div><h4>Cumpleaños</h4><p>Felicitaciones automáticas.</p><button type="button" class="btn-module" onclick="openTab(null, 'construccion')">+ Habilitar</button></div>
+                        <div class="module-card"><div class="module-header"><div class="module-icon purple-icon"><i class="fa-solid fa-gift"></i></div></div><h4>Sorteos</h4><p>Giveaways automáticos.</p><button type="button" class="btn-module" onclick="openTab(null, 'construccion')">Crear</button></div>
+                        <div class="module-card"><div class="module-header"><div class="module-icon yellow-icon"><i class="fa-solid fa-trophy"></i></div><span class="premium-badge">TOP</span></div><h4>Niveles y XP</h4><p>Ranking de actividad.</p><button type="button" class="btn-module" onclick="openTab(null, 'construccion')">+ Habilitar</button></div>
+                        <div class="module-card"><div class="module-header"><div class="module-icon purple-icon"><i class="fa-solid fa-music"></i></div></div><h4>Música</h4><p>Reproductor de alta calidad.</p><button type="button" class="btn-module" onclick="openTab(null, 'construccion')">+ Habilitar</button></div>
                     </div>
-
                     <h3 class="section-title"><i class="fa-solid fa-star"></i> Extras</h3>
                     <div class="modules-grid">
-                        <div class="module-card">
-                            <div class="module-header"><div class="module-icon yellow-icon"><i class="fa-solid fa-coins"></i></div></div>
-                            <h4>Economía</h4><p>Moneda virtual y tienda.</p>
-                            <button type="button" class="btn-module" onclick="openTab(null, 'construccion')">+ Habilitar</button>
-                        </div>
-                        <div class="module-card">
-                            <div class="module-header"><div class="module-icon blue-icon"><i class="fa-solid fa-chart-simple"></i></div></div>
-                            <h4>Estadísticas</h4><p>Contadores de miembros.</p>
-                            <button type="button" class="btn-module" onclick="openTab(null, 'construccion')">+ Habilitar</button>
-                        </div>
-                        <div class="module-card">
-                            <div class="module-header"><div class="module-icon cyan-icon"><i class="fa-solid fa-magnifying-glass"></i></div></div>
-                            <h4>Buscador</h4><p>Google/YouTube en Discord.</p>
-                            <button type="button" class="btn-module" onclick="openTab(null, 'construccion')">+ Habilitar</button>
-                        </div>
-                        <div class="module-card">
-                            <div class="module-header"><div class="module-icon green-icon"><i class="fa-solid fa-circle-question"></i></div></div>
-                            <h4>Ayuda</h4><p>Soporte y comandos de info.</p>
-                            <button type="button" class="btn-module" onclick="openTab(null, 'construccion')">Ver</button>
+                        <div class="module-card"><div class="module-header"><div class="module-icon yellow-icon"><i class="fa-solid fa-coins"></i></div></div><h4>Economía</h4><p>Moneda virtual y tienda.</p><button type="button" class="btn-module" onclick="openTab(null, 'construccion')">+ Habilitar</button></div>
+                        <div class="module-card"><div class="module-header"><div class="module-icon blue-icon"><i class="fa-solid fa-chart-simple"></i></div></div><h4>Estadísticas</h4><p>Contadores de miembros.</p><button type="button" class="btn-module" onclick="openTab(null, 'construccion')">+ Habilitar</button></div>
+                        <div class="module-card"><div class="module-header"><div class="module-icon cyan-icon"><i class="fa-solid fa-magnifying-glass"></i></div></div><h4>Buscador</h4><p>Google/YouTube en Discord.</p><button type="button" class="btn-module" onclick="openTab(null, 'construccion')">+ Habilitar</button></div>
+                        <div class="module-card"><div class="module-header"><div class="module-icon green-icon"><i class="fa-solid fa-circle-question"></i></div></div><h4>Ayuda</h4><p>Soporte y comandos.</p><button type="button" class="btn-module" onclick="openTab(null, 'construccion')">Ver</button></div>
+                    </div>
+                </div>
+
+                <div id="personalizador" class="tab-content" style="display: none;">
+                    <div class="content-header"><h1>Personalizador</h1><p>Define la identidad y presencia del bot.</p></div>
+                    <div class="settings-card">
+                        <div class="setting-row" style="align-items: flex-start;">
+                            <div class="setting-info" style="flex: 1;">
+                                <div style="margin-bottom: 20px;"><label>Apodo en este Servidor</label><input type="text" name="botNickname" value="<%= config.botNickname || 'Habbus' %>" class="form-input change-detect" placeholder="Ej: Santa Claus"></div>
+                                
+                                <div style="margin-bottom: 20px;">
+                                    <label>Avatar del Servidor</label>
+                                    <span class="desc">Sube una imagen (PNG o JPG, máx 8MB).</span>
+                                    <input type="file" id="botAvatarInput" name="botAvatarFile" accept="image/png, image/jpeg, image/jpg" class="form-input change-detect" style="padding: 8px;">
+                                </div>
+
+                                <div style="margin-bottom: 20px;"><label>Estado del Bot</label><select name="botStatus" id="statusSelect" class="form-input change-detect"><option value="online" <%= config.botStatus === 'online' ? 'selected' : '' %>>🟢 En Línea</option><option value="idle" <%= config.botStatus === 'idle' ? 'selected' : '' %>>🌙 Ausente</option><option value="dnd" <%= config.botStatus === 'dnd' ? 'selected' : '' %>>⛔ No Molestar</option><option value="invisible" <%= config.botStatus === 'invisible' ? 'selected' : '' %>>👻 Invisible</option></select></div>
+                                <div style="display: flex; gap: 10px;"><div style="flex: 1;"><label>Tipo Actividad</label><select name="activityType" id="activityTypeSelect" class="form-input change-detect"><option value="0" <%= config.activityType === 0 ? 'selected' : '' %>>Jugando a</option><option value="3" <%= config.activityType === 3 ? 'selected' : '' %>>Viendo</option><option value="2" <%= config.activityType === 2 ? 'selected' : '' %>>Escuchando</option><option value="5" <%= config.activityType === 5 ? 'selected' : '' %>>Compitiendo en</option></select></div><div style="flex: 2;"><label>Texto de Actividad</label><input type="text" name="activityText" id="activityTextInput" value="<%= config.activityText || 'Navidad' %>" class="form-input change-detect"></div></div>
+                            </div>
+                            <div class="setting-input" style="flex: 0 0 320px; margin-left: 40px;">
+                                <label style="margin-bottom: 10px; display: block;">Vista Previa</label>
+                                <div class="discord-preview-card">
+                                    <div class="discord-user">
+                                        <div class="avatar-wrapper">
+                                            <img src="<%= config.botAvatar || '/images/logo_navidad.png' %>" alt="Bot" class="bot-avatar-preview" id="previewAvatarImg">
+                                            <div class="status-indicator" id="previewStatusDot"></div>
+                                        </div>
+                                        <div style="display: flex; flex-direction: column;"><div style="display: flex; align-items: center; gap: 5px;"><span class="bot-name-preview"><%= config.botNickname || 'Habbus' %></span><span class="bot-tag">BOT</span></div><span class="activity-preview" id="previewActivity" style="font-size: 0.75rem; color: #b9bbbe;">Jugando a <strong>Navidad</strong></span></div>
+                                    </div>
+                                    <div class="discord-embed" id="embedPreview" style="border-left-color: <%= config.embedColor || '#ff0f0f' %>; margin-top: 10px;"><div class="embed-title">Mensaje de Ejemplo</div><div class="embed-desc">¡Hola! Así se ve mi perfil y mis colores en tu servidor.</div></div>
+                                </div>
+                                <div style="margin-top: 20px;"><label>Color del Tema</label><div style="margin-top: 5px; display: flex; align-items: center; gap: 10px;"><input type="color" id="colorPicker" name="embedColor" value="<%= config.embedColor || '#ff0f0f' %>" class="change-detect" style="height: 40px; width: 100%; cursor: pointer; border: none; background: none;"></div></div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 <div id="bienvenida" class="tab-content" style="display: none;">
-                    <div class="content-header"><h1>Sistema de Bienvenida</h1><p>Recibe a tus usuarios como se merecen.</p></div>
-                    
+                    <div class="content-header"><h1>Sistema de Bienvenida</h1><p>Recibe a tus usuarios.</p></div>
                     <div class="settings-card">
-                        
                         <div class="setting-row" style="align-items: center; justify-content: space-between;">
-                            <div class="setting-info">
-                                <label>Habilitar Bienvenida</label>
-                                <span class="desc">Activa o desactiva este módulo.</span>
-                            </div>
-                            <label class="switch">
-                                <input type="checkbox" name="welcomeEnabled" class="change-detect" <%= config.welcomeEnabled ? 'checked' : '' %>>
-                                <span class="slider round"></span>
-                            </label>
+                            <div class="setting-info"><label>Habilitar Bienvenida</label><span class="desc">Activar módulo.</span></div>
+                            <label class="switch"><input type="checkbox" name="welcomeEnabled" class="change-detect" <%= config.welcomeEnabled ? 'checked' : '' %>><span class="slider round"></span></label>
                         </div>
-
                         <hr class="divider">
-
                         <div class="setting-row">
-                            <div class="setting-info">
-                                <label>Canal de Bienvenida</label>
-                                <span class="desc">¿Dónde enviará el bot el mensaje?</span>
-                            </div>
+                            <div class="setting-info"><label>Canal</label><span class="desc">¿Dónde saludar?</span></div>
                             <div class="setting-input">
                                 <select name="welcomeChannel" class="form-input change-detect">
-                                    <option value="" disabled <%= !config.welcomeChannel ? 'selected' : '' %>>Selecciona un canal...</option>
+                                    <option value="" disabled <%= !config.welcomeChannel ? 'selected' : '' %>>Selecciona...</option>
                                     <% if (typeof channels !== 'undefined' && channels.length > 0) { %>
-                                        <% channels.forEach(ch => { %>
-                                            <option value="<%= ch.id %>" <%= config.welcomeChannel === ch.id ? 'selected' : '' %>># <%= ch.name %></option>
-                                        <% }) %>
-                                    <% } else { %>
-                                        <option value="" disabled>No hay canales disponibles</option>
-                                    <% } %>
+                                        <% channels.forEach(ch => { %><option value="<%= ch.id %>" <%= config.welcomeChannel === ch.id ? 'selected' : '' %>># <%= ch.name %></option><% }) %>
+                                    <% } else { %><option value="" disabled>Sin canales</option><% } %>
                                 </select>
                             </div>
                         </div>
-
                         <div class="setting-row">
-                            <div class="setting-info">
-                                <label>Mensaje de Texto</label>
-                                <span class="desc">Variables: <code>{user}</code> <code>{server}</code></span>
-                            </div>
-                            <div class="setting-input">
-                                <textarea name="welcomeMessage" rows="5" class="form-input change-detect"><%= config.welcomeMessage %></textarea>
-                            </div>
+                            <div class="setting-info"><label>Mensaje</label><span class="desc">Variables: {user}, {server}</span></div>
+                            <div class="setting-input"><textarea name="welcomeMessage" rows="5" class="form-input change-detect"><%= config.welcomeMessage %></textarea></div>
                         </div>
-
                     </div>
                 </div>
 
@@ -329,24 +225,17 @@
                     <div class="content-header"><h1>Ajustes Generales</h1><p>Configuración básica.</p></div>
                     <div class="settings-card">
                         <div class="setting-row">
-                            <div class="setting-info"><label>Prefijo</label><span class="desc">Símbolo para comandos.</span></div>
+                            <div class="setting-info"><label>Prefijo</label><span class="desc">Símbolo comandos.</span></div>
                             <div class="setting-input"><input type="text" name="prefix" value="<%= config.prefix %>" class="form-input change-detect"></div>
                         </div>
                     </div>
                 </div>
 
-                <div id="construccion" class="tab-content" style="display: none; text-align: center; padding-top: 50px;">
-                    <i class="fa-solid fa-person-digging" style="font-size: 4rem; color: rgba(255,255,255,0.2); margin-bottom: 20px;"></i>
-                    <h2>Próximamente</h2><p>Módulo en desarrollo.</p>
-                </div>
-                <div id="personalizador" class="tab-content" style="display: none; text-align: center; padding-top: 50px;"><h2>🎨 Personalizador</h2></div>
+                <div id="construccion" class="tab-content" style="display: none; text-align: center; padding-top: 50px;"><i class="fa-solid fa-person-digging" style="font-size: 4rem; color: rgba(255,255,255,0.2); margin-bottom: 20px;"></i><h2>Próximamente</h2></div>
                 <div id="premium" class="tab-content" style="display: none; text-align: center; padding-top: 50px;"><h2>💎 Premium</h2></div>
                 <div id="emojis" class="tab-content" style="display: none; text-align: center; padding-top: 50px;"><h2>😀 Emojis</h2></div>
 
-                <div id="saveBar" class="floating-save-bar">
-                    <span>¡Tienes cambios sin guardar!</span>
-                    <button type="submit" class="btn-save">Guardar Cambios</button>
-                </div>
+                <div id="saveBar" class="floating-save-bar"><span>¡Tienes cambios sin guardar!</span><button type="submit" class="btn-save">Guardar Cambios</button></div>
             </form>
         </main>
     </div>
@@ -354,63 +243,75 @@
     <div id="successToast" class="success-toast"><i class="fa-solid fa-check-circle"></i> Guardado correctamente</div>
 
     <script>
-        // 1. Nieve
         const snowContainer = document.querySelector('.snow-container');
-        if(snowContainer) {
-            for(let i=0; i<50; i++) {
-                const div = document.createElement('div'); div.className = 'snow';
-                div.style.left = Math.random() * 100 + '%'; div.style.animationDuration = (Math.random() * 5 + 5) + 's'; div.style.opacity = Math.random();
-                snowContainer.appendChild(div);
-            }
-        }
-        // 2. Tabs
-        function openTab(evt, tabName) {
-            document.querySelectorAll('.tab-content').forEach(d => {d.style.display='none'; d.classList.remove('active-anim');});
-            document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
-            const sel = document.getElementById(tabName);
-            if(sel) { sel.style.display='block'; setTimeout(()=>sel.classList.add("active-anim"),10); }
-            if(evt) evt.currentTarget.classList.add('active');
-        }
+        if(snowContainer) { for(let i=0; i<50; i++) { const div = document.createElement('div'); div.className = 'snow'; div.style.left = Math.random() * 100 + '%'; div.style.animationDuration = (Math.random() * 5 + 5) + 's'; div.style.opacity = Math.random(); snowContainer.appendChild(div); } }
+        function openTab(evt, tabName) { document.querySelectorAll('.tab-content').forEach(d => {d.style.display='none'; d.classList.remove('active-anim');}); document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active')); const sel = document.getElementById(tabName); if(sel) { sel.style.display='block'; setTimeout(()=>sel.classList.add("active-anim"),10); } if(evt) evt.currentTarget.classList.add('active'); }
         document.getElementById('sidebarToggle').addEventListener('click', () => document.getElementById('sidebar').classList.toggle('collapsed'));
+        const serverMenu = document.getElementById('serverMenu'); function toggleServerMenu() { serverMenu.classList.toggle('show'); } function selectServer(id) { window.location.href = '/dashboard?guild=' + id; } window.onclick = e => { if(!e.target.closest('.server-dropdown-container')) serverMenu.classList.remove('show'); };
         
-        // 3. Server Selector
-        const serverMenu = document.getElementById('serverMenu');
-        function toggleServerMenu() { serverMenu.classList.toggle('show'); }
-        
-        function selectServer(id) {
-            // REDIRECCIÓN PARA CARGAR DATOS
-            window.location.href = '/dashboard?guild=' + id;
-        }
-
-        window.onclick = e => { if(!e.target.closest('.server-dropdown-container')) serverMenu.classList.remove('show'); };
-        
-        // 4. Save
         const form=document.getElementById('configForm'), saveBar=document.getElementById('saveBar'), inputs=document.querySelectorAll('.change-detect');
         let initVals={}; 
-        inputs.forEach(i => { 
-            initVals[i.name] = i.type === 'checkbox' ? i.checked : i.value; 
-            i.addEventListener('change', checkChanges);
-            i.addEventListener('input', checkChanges);
-        });
+        inputs.forEach(i => { initVals[i.name] = i.type === 'checkbox' ? i.checked : i.value; i.addEventListener('change', checkChanges); i.addEventListener('input', checkChanges); });
+        function checkChanges(){ let chg=false; inputs.forEach(i => { const val = i.type === 'checkbox' ? i.checked : i.value; if(val !== initVals[i.name]) chg=true; }); saveBar.classList.toggle('show', chg); }
         
-        function checkChanges(){
-            let chg=false; 
-            inputs.forEach(i => { 
-                const val = i.type === 'checkbox' ? i.checked : i.value;
-                if(val !== initVals[i.name]) chg=true; 
-            });
-            saveBar.classList.toggle('show', chg);
-        }
+        // --- LÓGICA DE PERSONALIZADOR ---
+        const colorPicker = document.getElementById('colorPicker');
+        const embedPreview = document.getElementById('embedPreview');
+        const botNicknameInput = document.querySelector('input[name="botNickname"]');
+        const botNamePreview = document.querySelector('.bot-name-preview');
+        const botAvatarInput = document.getElementById('botAvatarInput'); // Input FILE
+        const previewAvatarImg = document.getElementById('previewAvatarImg');
+        const statusSelect = document.getElementById('statusSelect');
+        const previewStatusDot = document.getElementById('previewStatusDot');
+        const activityTypeSelect = document.getElementById('activityTypeSelect');
+        const activityTextInput = document.getElementById('activityTextInput');
+        const previewActivity = document.getElementById('previewActivity');
+
+        if(colorPicker) colorPicker.addEventListener('input', (e) => embedPreview.style.borderLeftColor = e.target.value);
+        if(botNicknameInput) botNicknameInput.addEventListener('input', (e) => botNamePreview.textContent = e.target.value || "Habbus");
         
-        form.addEventListener('submit', e=>{
-            e.preventDefault();
-            fetch('/save-config', {method:'POST', body:new URLSearchParams(new FormData(form))}).then(r=>{
-                if(r.ok){
-                    saveBar.classList.remove('show'); 
-                    inputs.forEach(i => initVals[i.name] = i.type === 'checkbox' ? i.checked : i.value);
-                    const t=document.getElementById('successToast'); t.classList.add('active'); setTimeout(()=>t.classList.remove('active'),3000);
+        // NUEVO: Previsualizar imagen local
+        if(botAvatarInput) {
+            botAvatarInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        previewAvatarImg.src = e.target.result; // Mostrar la imagen local inmediatamente
+                    }
+                    reader.readAsDataURL(file);
                 }
-            }).catch(()=>alert("Error"));
+            });
+        }
+
+        function updateStatusPreview() {
+            const typeMap = { "0": "Jugando a", "2": "Escuchando", "3": "Viendo", "5": "Compitiendo en" };
+            const typeText = typeMap[activityTypeSelect.value] || "";
+            const text = activityTextInput.value;
+            previewActivity.innerHTML = `${typeText} <strong>${text}</strong>`;
+            const statusColors = { "online": "#43b581", "idle": "#faa61a", "dnd": "#f04747", "invisible": "#747f8d" };
+            previewStatusDot.style.backgroundColor = statusColors[statusSelect.value] || "#43b581";
+        }
+        if(statusSelect && activityTypeSelect && activityTextInput) { statusSelect.addEventListener('change', updateStatusPreview); activityTypeSelect.addEventListener('change', updateStatusPreview); activityTextInput.addEventListener('input', updateStatusPreview); updateStatusPreview(); }
+
+        // --- ENVÍO DEL FORMULARIO (USANDO fetch con FormData para archivos) ---
+        form.addEventListener('submit', e => {
+            e.preventDefault();
+            const formData = new FormData(form); // FormData maneja archivos automáticamente
+
+            fetch('/save-config', {
+                method: 'POST',
+                body: formData // No usamos URLSearchParams aquí porque hay archivos
+            }).then(r => {
+                if(r.ok){
+                    saveBar.classList.remove('show');
+                    // Actualizar valores iniciales (truco para inputs de texto, el de archivo es complejo de resetear en frontend)
+                    inputs.forEach(i => { if(i.type !== 'file') initVals[i.name] = i.type === 'checkbox' ? i.checked : i.value; });
+                    const t=document.getElementById('successToast'); t.classList.add('active'); setTimeout(()=>t.classList.remove('active'),3000);
+                } else {
+                    alert("Error al guardar. Revisa la consola.");
+                }
+            }).catch(err => { console.error(err); alert("Error de red."); });
         });
     </script>
 </body>
