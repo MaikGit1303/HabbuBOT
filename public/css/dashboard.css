@@ -324,6 +324,163 @@ input:checked + .slider:before { transform: translateX(24px); }
 }
 .success-toast.active { transform: translateX(-50%) translateY(0); opacity: 1; }
 
+/* --- NUEVO: SELECTOR DE ROLES ESTILO DISCORD --- */
+.role-selector-box {
+    background-color: var(--bg-input);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    height: 180px; /* Altura fija con scroll */
+    overflow-y: auto;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+/* Personalizar la barra de scroll de la caja */
+.role-selector-box::-webkit-scrollbar { width: 6px; }
+.role-selector-box::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 3px; }
+.role-selector-box::-webkit-scrollbar-track { background: rgba(0,0,0,0.3); }
+
+.role-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s;
+    user-select: none;
+}
+
+.role-item:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+/* Checkbox personalizado */
+.role-item input[type="checkbox"] {
+    accent-color: var(--accent); /* Se pone rojo Habbus al marcar */
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.role-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.2);
+}
+
+.role-name {
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+/* --- NUEVO: DROPDOWN MULTI-SELECT PROFESIONAL --- */
+.multiselect-container {
+    position: relative;
+    width: 100%;
+}
+
+.select-box {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--bg-input);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.select-box:hover {
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.select-box.active {
+    border-color: var(--accent);
+    box-shadow: 0 0 10px rgba(255, 15, 15, 0.1);
+}
+
+.select-box .selected-text {
+    font-size: 0.9rem;
+    color: #ddd;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.select-box i {
+    color: var(--text-muted);
+    transition: transform 0.3s;
+}
+
+.select-box.active i {
+    transform: rotate(180deg);
+}
+
+/* La lista desplegable (oculta por defecto) */
+.options-container {
+    display: none;
+    position: absolute;
+    top: 110%; /* Justo debajo del input */
+    left: 0;
+    right: 0;
+    background-color: #1a1a1a;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    max-height: 200px;
+    overflow-y: auto;
+    z-index: 100;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+    padding: 5px;
+}
+
+.options-container.show {
+    display: block;
+    animation: fadeInDown 0.2s ease;
+}
+
+@keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Scrollbar fina para el dropdown */
+.options-container::-webkit-scrollbar { width: 5px; }
+.options-container::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 3px; }
+
+/* Items dentro de la lista */
+.option-item {
+    display: flex;
+    align-items: center;
+    padding: 8px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.option-item:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.option-item input[type="checkbox"] {
+    margin-right: 10px;
+    accent-color: var(--accent);
+    width: 16px; height: 16px;
+    cursor: pointer;
+}
+
+.role-dot-small {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    margin-right: 8px;
+    display: inline-block;
+}
+
 /* --- NIEVE --- */
 .snow-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; overflow: hidden; }
 .snow { position: absolute; top: -10px; background: white; border-radius: 50%; opacity: 0.8; filter: blur(1px); animation: fall linear infinite; }

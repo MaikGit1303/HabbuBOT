@@ -5,15 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - Habbus</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fira+Code:wght@500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/dashboard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
 
-    <% 
-        let currentServer = { name: "Sin servidores", icon: "https://cdn.discordapp.com/embed/avatars/0.png", id: "" };
+    <%
+        // Verificaciones para variables indefinidas
+        if (!stats) stats = { status: 'Offline', servers: 0, ping: 0 };
+        if (!config) config = {
+            prefix: '!', language: 'es', timezone: 'America/Bogota',
+            ignoredChannels: [], adminRole: [], modRole: [], muteRole: '',
+            automodBadWords: false, automodLinks: false,
+            logChannel: '', logMessages: false, logMembers: false,
+            botNickname: 'Habbus', botAvatar: '', embedColor: '#ff0f0f',
+            botStatus: 'online', activityType: 0, activityText: 'Navidad',
+            welcomeEnabled: false, welcomeChannel: '', welcomeMessage: '¡Bienvenido {user} a {server}!'
+        };
+        if (!user) user = { username: 'Usuario', id: '0', avatar: '0' };
+        if (!servers) servers = [];
+        if (!channels) channels = [];
+        if (!roles) roles = [];
+        if (!selectedGuildId) selectedGuildId = '';
+    %>
+
+    <%
         if (typeof servers !== 'undefined' && servers.length > 0) {
             if (typeof selectedGuildId !== 'undefined' && selectedGuildId) {
                 const found = servers.find(s => s.id === selectedGuildId);
@@ -65,6 +81,7 @@
     </nav>
 
     <div class="layout-wrapper">
+        
         <aside class="sidebar" id="sidebar">
             <div class="menu-section">
                 <div class="menu-item active" onclick="openTab(event, 'panel')"><i class="fa-solid fa-border-all"></i> <span class="link-text">Panel de control</span></div>
@@ -77,10 +94,10 @@
                 <span class="menu-header">GESTIÓN DEL SERVIDOR</span>
                 <div class="menu-item" onclick="openTab(event, 'bienvenida')"><i class="fa-solid fa-hand-spock"></i> <span class="link-text">Bienvenidas</span></div>
                 <div class="menu-item" onclick="openTab(event, 'construccion')"><i class="fa-solid fa-door-open"></i> <span class="link-text">Canal Bienvenida</span></div>
-                <div class="menu-item" onclick="openTab(event, 'construccion')"><i class="fa-solid fa-gavel"></i> <span class="link-text">Moderación</span></div>
+                <div class="menu-item" onclick="openTab(event, 'moderacion')"><i class="fa-solid fa-gavel"></i> <span class="link-text">Moderación</span></div>
                 <div class="menu-item" onclick="openTab(event, 'construccion')"><i class="fa-solid fa-medal"></i> <span class="link-text">Logros</span></div>
                 <div class="menu-item" onclick="openTab(event, 'construccion')"><i class="fa-solid fa-user-check"></i> <span class="link-text">Verificación</span></div>
-                <div class="menu-item" onclick="openTab(event, 'construccion')"><i class="fa-solid fa-file-lines"></i> <span class="link-text">Registros</span></div>
+                <div class="menu-item" onclick="openTab(event, 'registros')"><i class="fa-solid fa-file-lines"></i> <span class="link-text">Registros</span></div>
             </div>
             <div class="menu-section">
                 <span class="menu-header">UTILIDADES</span>
@@ -116,48 +133,34 @@
             <form id="configForm" action="/save-config" method="POST" enctype="multipart/form-data">
                 <input type="hidden" name="guildId" id="guildIdInput" value="<%= currentServer.id %>">
 
-                <div id="panel" class="tab-content active">
-                    <div class="content-header"><h1>Panel de Control</h1><p>Gestiona los módulos de <strong><%= currentServer.name %></strong></p></div>
+                <div id="panel" class="tab-content active" style="display: block; opacity: 1;">
+                    <div class="content-header">
+                        <h1>Panel de Control</h1>
+                        <p>Gestiona los módulos de <strong><%= currentServer.name %></strong></p>
+                    </div>
+
                     <div class="stats-grid">
                         <div class="stat-card"><i class="fa-solid fa-signal" style="color: #43b581;"></i><div><h3><%= stats.status %></h3><span>Estado</span></div></div>
                         <div class="stat-card"><i class="fa-solid fa-server" style="color: #5865F2;"></i><div><h3><%= stats.servers %></h3><span>Servidores</span></div></div>
                         <div class="stat-card"><i class="fa-solid fa-bolt" style="color: #ffc107;"></i><div><h3><%= stats.ping %>ms</h3><span>Latencia</span></div></div>
                     </div>
+
                     <hr class="divider">
+
                     <h3 class="section-title"><i class="fa-solid fa-server"></i> Gestión del Servidor</h3>
                     <div class="modules-grid">
                         <div class="module-card"><div class="module-header"><div class="module-icon blue-icon"><i class="fa-solid fa-hand-spock"></i></div></div><h4>Bienvenidas</h4><p>Configura mensajes de entrada.</p><button type="button" class="btn-module" onclick="openTab(null, 'bienvenida')">Configurar</button></div>
                         <div class="module-card"><div class="module-header"><div class="module-icon cyan-icon"><i class="fa-solid fa-door-open"></i></div></div><h4>Canal Bienvenida</h4><p>Define dónde saluda el bot.</p><button type="button" class="btn-module" onclick="openTab(null, 'construccion')">Configurar</button></div>
-                        <div class="module-card"><div class="module-header"><div class="module-icon red-icon"><i class="fa-solid fa-gavel"></i></div></div><h4>Moderación</h4><p>Ban, kick, mute y automod.</p><button type="button" class="btn-module" onclick="openTab(null, 'construccion')">Configurar</button></div>
+                        <div class="module-card"><div class="module-header"><div class="module-icon red-icon"><i class="fa-solid fa-gavel"></i></div></div><h4>Moderación</h4><p>Ban, kick, mute y automod.</p><button type="button" class="btn-module" onclick="openTab(null, 'moderacion')">Configurar</button></div>
                         <div class="module-card"><div class="module-header"><div class="module-icon yellow-icon"><i class="fa-solid fa-medal"></i></div></div><h4>Logros</h4><p>Medallas para usuarios.</p><button type="button" class="btn-module" onclick="openTab(null, 'construccion')">+ Habilitar</button></div>
                         <div class="module-card"><div class="module-header"><div class="module-icon green-icon"><i class="fa-solid fa-user-check"></i></div></div><h4>Verificación</h4><p>Sistema de captcha.</p><button type="button" class="btn-module" onclick="openTab(null, 'construccion')">+ Habilitar</button></div>
-                        <div class="module-card"><div class="module-header"><div class="module-icon purple-icon"><i class="fa-solid fa-file-lines"></i></div></div><h4>Registros</h4><p>Logs de auditoría.</p><button type="button" class="btn-module" onclick="openTab(null, 'construccion')">+ Habilitar</button></div>
+                        <div class="module-card"><div class="module-header"><div class="module-icon purple-icon"><i class="fa-solid fa-file-lines"></i></div></div><h4>Registros</h4><p>Logs de auditoría.</p><button type="button" class="btn-module" onclick="openTab(null, 'registros')">+ Habilitar</button></div>
                     </div>
+
                     <h3 class="section-title"><i class="fa-solid fa-toolbox"></i> Utilidades</h3>
                     <div class="modules-grid">
                         <div class="module-card"><div class="module-header"><div class="module-icon yellow-icon"><i class="fa-solid fa-id-card"></i></div></div><h4>Roles Reacción</h4><p>Roles por clic en emoji.</p><button type="button" class="btn-module" onclick="openTab(null, 'construccion')">Configurar</button></div>
                         <div class="module-card"><div class="module-header"><div class="module-icon cyan-icon"><i class="fa-solid fa-pen-to-square"></i></div></div><h4>Embeds</h4><p>Mensajes visuales avanzados.</p><button type="button" class="btn-module" onclick="openTab(null, 'construccion')">Crear</button></div>
-                        <div class="module-card"><div class="module-header"><div class="module-icon red-icon"><i class="fa-solid fa-rss"></i></div></div><h4>Alertas Sociales</h4><p>Notificaciones YouTube/Twitch.</p><button type="button" class="btn-module" onclick="openTab(null, 'construccion')">+ Habilitar</button></div>
-                        <div class="module-card"><div class="module-header"><div class="module-icon blue-icon"><i class="fa-solid fa-robot"></i></div></div><h4>Automatizaciones</h4><p>Respuestas auto y tareas.</p><button type="button" class="btn-module" onclick="openTab(null, 'construccion')">+ Habilitar</button></div>
-                        <div class="module-card"><div class="module-header"><div class="module-icon purple-icon"><i class="fa-solid fa-terminal"></i></div></div><h4>Comandos Custom</h4><p>Crea comandos propios.</p><button type="button" class="btn-module" onclick="openTab(null, 'construccion')">Crear</button></div>
-                        <div class="module-card"><div class="module-header"><div class="module-icon green-icon"><i class="fa-solid fa-user-plus"></i></div></div><h4>Rastreador</h4><p>Control de invitaciones.</p><button type="button" class="btn-module" onclick="openTab(null, 'construccion')">+ Habilitar</button></div>
-                        <div class="module-card"><div class="module-header"><div class="module-icon green-icon"><i class="fa-solid fa-ticket"></i></div></div><h4>Tickets</h4><p>Soporte privado.</p><button type="button" class="btn-module" onclick="openTab(null, 'construccion')">+ Habilitar</button></div>
-                    </div>
-                    <h3 class="section-title"><i class="fa-solid fa-gamepad"></i> Diversión</h3>
-                    <div class="modules-grid">
-                        <div class="module-card"><div class="module-header"><div class="module-icon yellow-icon"><i class="fa-solid fa-icons"></i></div></div><h4>Emojis</h4><p>Gestión de emojis.</p><button type="button" class="btn-module" onclick="openTab(null, 'emojis')">Gestionar</button></div>
-                        <div class="module-card"><div class="module-header"><div class="module-icon cyan-icon"><i class="fa-solid fa-bell"></i></div></div><h4>Recordatorios</h4><p>Alarmas y avisos.</p><button type="button" class="btn-module" onclick="openTab(null, 'construccion')">+ Habilitar</button></div>
-                        <div class="module-card"><div class="module-header"><div class="module-icon red-icon"><i class="fa-solid fa-cake-candles"></i></div></div><h4>Cumpleaños</h4><p>Felicitaciones automáticas.</p><button type="button" class="btn-module" onclick="openTab(null, 'construccion')">+ Habilitar</button></div>
-                        <div class="module-card"><div class="module-header"><div class="module-icon purple-icon"><i class="fa-solid fa-gift"></i></div></div><h4>Sorteos</h4><p>Giveaways automáticos.</p><button type="button" class="btn-module" onclick="openTab(null, 'construccion')">Crear</button></div>
-                        <div class="module-card"><div class="module-header"><div class="module-icon yellow-icon"><i class="fa-solid fa-trophy"></i></div><span class="premium-badge">TOP</span></div><h4>Niveles y XP</h4><p>Ranking de actividad.</p><button type="button" class="btn-module" onclick="openTab(null, 'construccion')">+ Habilitar</button></div>
-                        <div class="module-card"><div class="module-header"><div class="module-icon purple-icon"><i class="fa-solid fa-music"></i></div></div><h4>Música</h4><p>Reproductor de alta calidad.</p><button type="button" class="btn-module" onclick="openTab(null, 'construccion')">+ Habilitar</button></div>
-                    </div>
-                    <h3 class="section-title"><i class="fa-solid fa-star"></i> Extras</h3>
-                    <div class="modules-grid">
-                        <div class="module-card"><div class="module-header"><div class="module-icon yellow-icon"><i class="fa-solid fa-coins"></i></div></div><h4>Economía</h4><p>Moneda virtual y tienda.</p><button type="button" class="btn-module" onclick="openTab(null, 'construccion')">+ Habilitar</button></div>
-                        <div class="module-card"><div class="module-header"><div class="module-icon blue-icon"><i class="fa-solid fa-chart-simple"></i></div></div><h4>Estadísticas</h4><p>Contadores de miembros.</p><button type="button" class="btn-module" onclick="openTab(null, 'construccion')">+ Habilitar</button></div>
-                        <div class="module-card"><div class="module-header"><div class="module-icon cyan-icon"><i class="fa-solid fa-magnifying-glass"></i></div></div><h4>Buscador</h4><p>Google/YouTube en Discord.</p><button type="button" class="btn-module" onclick="openTab(null, 'construccion')">+ Habilitar</button></div>
-                        <div class="module-card"><div class="module-header"><div class="module-icon green-icon"><i class="fa-solid fa-circle-question"></i></div></div><h4>Ayuda</h4><p>Soporte y comandos.</p><button type="button" class="btn-module" onclick="openTab(null, 'construccion')">Ver</button></div>
                     </div>
                 </div>
 
@@ -167,24 +170,15 @@
                         <div class="setting-row" style="align-items: flex-start;">
                             <div class="setting-info" style="flex: 1;">
                                 <div style="margin-bottom: 20px;"><label>Apodo en este Servidor</label><input type="text" name="botNickname" value="<%= config.botNickname || 'Habbus' %>" class="form-input change-detect" placeholder="Ej: Santa Claus"></div>
-                                
-                                <div style="margin-bottom: 20px;">
-                                    <label>Avatar del Servidor</label>
-                                    <span class="desc">Sube una imagen (PNG o JPG, máx 8MB).</span>
-                                    <input type="file" id="botAvatarInput" name="botAvatarFile" accept="image/png, image/jpeg, image/jpg" class="form-input change-detect" style="padding: 8px;">
-                                </div>
-
+                                <div style="margin-bottom: 20px;"><label>Avatar del Servidor</label><span class="desc">Sube una imagen (PNG o JPG, máx 8MB).</span><input type="file" id="botAvatarInput" name="botAvatarFile" accept="image/*" class="form-input change-detect" style="padding: 8px;"></div>
                                 <div style="margin-bottom: 20px;"><label>Estado del Bot</label><select name="botStatus" id="statusSelect" class="form-input change-detect"><option value="online" <%= config.botStatus === 'online' ? 'selected' : '' %>>🟢 En Línea</option><option value="idle" <%= config.botStatus === 'idle' ? 'selected' : '' %>>🌙 Ausente</option><option value="dnd" <%= config.botStatus === 'dnd' ? 'selected' : '' %>>⛔ No Molestar</option><option value="invisible" <%= config.botStatus === 'invisible' ? 'selected' : '' %>>👻 Invisible</option></select></div>
-                                <div style="display: flex; gap: 10px;"><div style="flex: 1;"><label>Tipo Actividad</label><select name="activityType" id="activityTypeSelect" class="form-input change-detect"><option value="0" <%= config.activityType === 0 ? 'selected' : '' %>>Jugando a</option><option value="3" <%= config.activityType === 3 ? 'selected' : '' %>>Viendo</option><option value="2" <%= config.activityType === 2 ? 'selected' : '' %>>Escuchando</option><option value="5" <%= config.activityType === 5 ? 'selected' : '' %>>Compitiendo en</option></select></div><div style="flex: 2;"><label>Texto de Actividad</label><input type="text" name="activityText" id="activityTextInput" value="<%= config.activityText || 'Navidad' %>" class="form-input change-detect"></div></div>
+                                <div style="display: flex; gap: 10px;"><div style="flex: 1;"><label>Tipo</label><select name="activityType" id="activityTypeSelect" class="form-input change-detect"><option value="0" <%= config.activityType === 0 ? 'selected' : '' %>>Jugando a</option><option value="3" <%= config.activityType === 3 ? 'selected' : '' %>>Viendo</option><option value="2" <%= config.activityType === 2 ? 'selected' : '' %>>Escuchando</option><option value="5" <%= config.activityType === 5 ? 'selected' : '' %>>Compitiendo en</option></select></div><div style="flex: 2;"><label>Texto</label><input type="text" name="activityText" id="activityTextInput" value="<%= config.activityText || 'Navidad' %>" class="form-input change-detect"></div></div>
                             </div>
                             <div class="setting-input" style="flex: 0 0 320px; margin-left: 40px;">
                                 <label style="margin-bottom: 10px; display: block;">Vista Previa</label>
                                 <div class="discord-preview-card">
                                     <div class="discord-user">
-                                        <div class="avatar-wrapper">
-                                            <img src="<%= config.botAvatar || '/images/logo_navidad.png' %>" alt="Bot" class="bot-avatar-preview" id="previewAvatarImg">
-                                            <div class="status-indicator" id="previewStatusDot"></div>
-                                        </div>
+                                        <div class="avatar-wrapper"><img src="<%= config.botAvatar || '/images/logo_navidad.png' %>" alt="Bot" class="bot-avatar-preview" id="previewAvatarImg"><div class="status-indicator" id="previewStatusDot"></div></div>
                                         <div style="display: flex; flex-direction: column;"><div style="display: flex; align-items: center; gap: 5px;"><span class="bot-name-preview"><%= config.botNickname || 'Habbus' %></span><span class="bot-tag">BOT</span></div><span class="activity-preview" id="previewActivity" style="font-size: 0.75rem; color: #b9bbbe;">Jugando a <strong>Navidad</strong></span></div>
                                     </div>
                                     <div class="discord-embed" id="embedPreview" style="border-left-color: <%= config.embedColor || '#ff0f0f' %>; margin-top: 10px;"><div class="embed-title">Mensaje de Ejemplo</div><div class="embed-desc">¡Hola! Así se ve mi perfil y mis colores en tu servidor.</div></div>
@@ -195,39 +189,111 @@
                     </div>
                 </div>
 
-                <div id="bienvenida" class="tab-content" style="display: none;">
-                    <div class="content-header"><h1>Sistema de Bienvenida</h1><p>Recibe a tus usuarios.</p></div>
+                <div id="ajustes" class="tab-content" style="display: none;">
+                    <div class="content-header"><h1>Ajustes Generales</h1><p>Configuración esencial del núcleo del bot.</p></div>
                     <div class="settings-card">
-                        <div class="setting-row" style="align-items: center; justify-content: space-between;">
-                            <div class="setting-info"><label>Habilitar Bienvenida</label><span class="desc">Activar módulo.</span></div>
-                            <label class="switch"><input type="checkbox" name="welcomeEnabled" class="change-detect" <%= config.welcomeEnabled ? 'checked' : '' %>><span class="slider round"></span></label>
-                        </div>
-                        <hr class="divider">
+                        
                         <div class="setting-row">
-                            <div class="setting-info"><label>Canal</label><span class="desc">¿Dónde saludar?</span></div>
+                            <div class="setting-info"><label>Prefijo</label></div>
+                            <div class="setting-input"><input type="text" name="prefix" value="<%= config.prefix %>" class="form-input change-detect" style="width: 100px;"></div>
+                        </div>
+                        
+                        <div class="setting-row">
+                            <div class="setting-info"><label>Idioma</label></div>
+                            <div class="setting-input"><select name="language" class="form-input change-detect"><option value="es" <%= config.language === 'es' ? 'selected' : '' %>>🇪🇸 Español</option><option value="en" <%= config.language === 'en' ? 'selected' : '' %>>🇺🇸 English</option></select></div>
+                        </div>
+
+                        <div class="setting-row">
+                            <div class="setting-info"><label>Zona Horaria</label></div>
+                            <div class="setting-input"><select name="timezone" class="form-input change-detect"><option value="America/Bogota" <%= config.timezone === 'America/Bogota' ? 'selected' : '' %>>🇨🇴 Colombia</option><option value="America/Mexico_City" <%= config.timezone === 'America/Mexico_City' ? 'selected' : '' %>>🇲🇽 México</option><option value="Europe/Madrid" <%= config.timezone === 'Europe/Madrid' ? 'selected' : '' %>>🇪🇸 España</option><option value="America/New_York" <%= config.timezone === 'America/New_York' ? 'selected' : '' %>>🇺🇸 USA Este</option></select></div>
+                        </div>
+
+                        <hr class="divider">
+
+                        <div class="setting-row">
+                            <div class="setting-info"><label>Canales Ignorados</label><span class="desc">No responder aquí.</span></div>
                             <div class="setting-input">
-                                <select name="welcomeChannel" class="form-input change-detect">
-                                    <option value="" disabled <%= !config.welcomeChannel ? 'selected' : '' %>>Selecciona...</option>
-                                    <% if (typeof channels !== 'undefined' && channels.length > 0) { %>
-                                        <% channels.forEach(ch => { %><option value="<%= ch.id %>" <%= config.welcomeChannel === ch.id ? 'selected' : '' %>># <%= ch.name %></option><% }) %>
-                                    <% } else { %><option value="" disabled>Sin canales</option><% } %>
+                                <div class="multiselect-container" id="dd-ignored">
+                                    <div class="select-box" onclick="toggleMultiSelect('dd-ignored')"><span class="selected-text">Seleccionar canales...</span><i class="fa-solid fa-chevron-down"></i></div>
+                                    <div class="options-container">
+                                        <% if(channels){ channels.forEach(c => { let isChecked = config.ignoredChannels && (Array.isArray(config.ignoredChannels) ? config.ignoredChannels.includes(c.id) : config.ignoredChannels == c.id); %>
+                                            <label class="option-item"><input type="checkbox" name="ignoredChannels" value="<%= c.id %>" <%= isChecked ? 'checked' : '' %> onchange="updateSelectText('dd-ignored')"><span># <%= c.name %></span></label>
+                                        <% }) } %>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr class="divider">
+                        <h3>Jerarquía y Permisos</h3>
+
+                        <div class="setting-row">
+                            <div class="setting-info"><label>Roles Admin</label><span class="desc">Acceso total.</span></div>
+                            <div class="setting-input">
+                                <div class="multiselect-container" id="dd-admin">
+                                    <div class="select-box" onclick="toggleMultiSelect('dd-admin')"><span class="selected-text">Seleccionar roles...</span><i class="fa-solid fa-chevron-down"></i></div>
+                                    <div class="options-container">
+                                        <% if(roles){ roles.forEach(r => { let isChecked = config.adminRole && (Array.isArray(config.adminRole) ? config.adminRole.includes(r.id) : config.adminRole == r.id); let textColor = r.color === '#000000' ? '#ddd' : r.color; %>
+                                            <label class="option-item"><input type="checkbox" name="adminRole" value="<%= r.id %>" <%= isChecked ? 'checked' : '' %> onchange="updateSelectText('dd-admin')"><span class="role-dot-small" style="background-color: <%= r.color %>;"></span><span style="color: <%= textColor %>"><%= r.name %></span></label>
+                                        <% }) } else { %><div style="color: #888; padding: 10px;">Sin roles.</div><% } %>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="setting-row">
+                            <div class="setting-info"><label>Roles Moderador</label><span class="desc">Ban, Kick, Mute.</span></div>
+                            <div class="setting-input">
+                                <div class="multiselect-container" id="dd-mod">
+                                    <div class="select-box" onclick="toggleMultiSelect('dd-mod')"><span class="selected-text">Seleccionar roles...</span><i class="fa-solid fa-chevron-down"></i></div>
+                                    <div class="options-container">
+                                        <% if(roles){ roles.forEach(r => { let isChecked = config.modRole && (Array.isArray(config.modRole) ? config.modRole.includes(r.id) : config.modRole == r.id); let textColor = r.color === '#000000' ? '#ddd' : r.color; %>
+                                            <label class="option-item"><input type="checkbox" name="modRole" value="<%= r.id %>" <%= isChecked ? 'checked' : '' %> onchange="updateSelectText('dd-mod')"><span class="role-dot-small" style="background-color: <%= r.color %>;"></span><span style="color: <%= textColor %>"><%= r.name %></span></label>
+                                        <% }) } %>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="setting-row">
+                            <div class="setting-info"><label>Rol Silenciado</label></div>
+                            <div class="setting-input">
+                                <select name="muteRole" class="form-input change-detect">
+                                    <option value="">-- Único --</option>
+                                    <% if(typeof roles !== 'undefined' && roles.length > 0){ roles.forEach(r=>{ %><option value="<%= r.id %>" <%= config.muteRole===r.id?'selected':'' %> style="color:<%= r.color %>">@<%= r.name %></option><% }) } %>
                                 </select>
                             </div>
                         </div>
-                        <div class="setting-row">
-                            <div class="setting-info"><label>Mensaje</label><span class="desc">Variables: {user}, {server}</span></div>
-                            <div class="setting-input"><textarea name="welcomeMessage" rows="5" class="form-input change-detect"><%= config.welcomeMessage %></textarea></div>
-                        </div>
+
                     </div>
                 </div>
 
-                <div id="ajustes" class="tab-content" style="display: none;">
-                    <div class="content-header"><h1>Ajustes Generales</h1><p>Configuración básica.</p></div>
+                <div id="bienvenida" class="tab-content" style="display: none;">
+                    <div class="content-header"><h1>Sistema de Bienvenida</h1></div>
                     <div class="settings-card">
-                        <div class="setting-row">
-                            <div class="setting-info"><label>Prefijo</label><span class="desc">Símbolo comandos.</span></div>
-                            <div class="setting-input"><input type="text" name="prefix" value="<%= config.prefix %>" class="form-input change-detect"></div>
-                        </div>
+                        <div class="setting-row" style="align-items: center; justify-content: space-between;"><div class="setting-info"><label>Habilitar</label></div><label class="switch"><input type="checkbox" name="welcomeEnabled" class="change-detect" <%= config.welcomeEnabled ? 'checked' : '' %>><span class="slider round"></span></label></div>
+                        <hr class="divider">
+                        <div class="setting-row"><div class="setting-info"><label>Canal</label></div><div class="setting-input"><select name="welcomeChannel" class="form-input change-detect"><option value="" disabled <%= !config.welcomeChannel ? 'selected' : '' %>>Selecciona...</option><% if (typeof channels !== 'undefined' && channels.length > 0) { %><% channels.forEach(ch => { %><option value="<%= ch.id %>" <%= config.welcomeChannel === ch.id ? 'selected' : '' %>># <%= ch.name %></option><% }) %><% } else { %><option value="" disabled>Sin canales</option><% } %></select></div></div>
+                        <div class="setting-row"><div class="setting-info"><label>Mensaje</label></div><div class="setting-input"><textarea name="welcomeMessage" rows="5" class="form-input change-detect"><%= config.welcomeMessage %></textarea></div></div>
+                    </div>
+                </div>
+
+                <div id="moderacion" class="tab-content" style="display: none;">
+                    <div class="content-header"><h1>Moderación</h1></div>
+                    <div class="settings-card">
+                        <div class="setting-row" style="align-items: center; justify-content: space-between;"><div class="setting-info"><label style="color:#ff5555;">Anti-Malas Palabras</label></div><label class="switch"><input type="checkbox" name="automodBadWords" class="change-detect" <%= config.automodBadWords ? 'checked' : '' %>><span class="slider round"></span></label></div>
+                        <hr class="divider">
+                        <div class="setting-row" style="align-items: center; justify-content: space-between;"><div class="setting-info"><label style="color:#5865F2;">Anti-Links</label></div><label class="switch"><input type="checkbox" name="automodLinks" class="change-detect" <%= config.automodLinks ? 'checked' : '' %>><span class="slider round"></span></label></div>
+                    </div>
+                </div>
+
+                <div id="registros" class="tab-content" style="display: none;">
+                    <div class="content-header"><h1>Registros</h1></div>
+                    <div class="settings-card">
+                        <div class="setting-row"><div class="setting-info"><label>Canal Logs</label></div><div class="setting-input"><select name="logChannel" class="form-input change-detect"><option value="" disabled <%= !config.logChannel ? 'selected' : '' %>>Selecciona...</option><% if(typeof channels!=='undefined'){ channels.forEach(c=>{ %><option value="<%= c.id %>" <%= config.logChannel===c.id?'selected':'' %>># <%= c.name %></option><% }) } %></select></div></div>
+                        <hr class="divider">
+                        <div class="setting-row" style="align-items: center; justify-content: space-between;"><div class="setting-info"><label>Mensajes Borrados</label></div><label class="switch"><input type="checkbox" name="logMessages" class="change-detect" <%= config.logMessages ? 'checked' : '' %>><span class="slider round"></span></label></div>
+                        <div class="setting-row" style="align-items: center; justify-content: space-between; margin-top:15px;"><div class="setting-info"><label>Entradas/Salidas</label></div><label class="switch"><input type="checkbox" name="logMembers" class="change-detect" <%= config.logMembers ? 'checked' : '' %>><span class="slider round"></span></label></div>
                     </div>
                 </div>
 
@@ -243,74 +309,85 @@
     <div id="successToast" class="success-toast"><i class="fa-solid fa-check-circle"></i> Guardado correctamente</div>
 
     <script>
-        const snowContainer = document.querySelector('.snow-container');
-        if(snowContainer) { for(let i=0; i<50; i++) { const div = document.createElement('div'); div.className = 'snow'; div.style.left = Math.random() * 100 + '%'; div.style.animationDuration = (Math.random() * 5 + 5) + 's'; div.style.opacity = Math.random(); snowContainer.appendChild(div); } }
-        function openTab(evt, tabName) { document.querySelectorAll('.tab-content').forEach(d => {d.style.display='none'; d.classList.remove('active-anim');}); document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active')); const sel = document.getElementById(tabName); if(sel) { sel.style.display='block'; setTimeout(()=>sel.classList.add("active-anim"),10); } if(evt) evt.currentTarget.classList.add('active'); }
-        document.getElementById('sidebarToggle').addEventListener('click', () => document.getElementById('sidebar').classList.toggle('collapsed'));
-        const serverMenu = document.getElementById('serverMenu'); function toggleServerMenu() { serverMenu.classList.toggle('show'); } function selectServer(id) { window.location.href = '/dashboard?guild=' + id; } window.onclick = e => { if(!e.target.closest('.server-dropdown-container')) serverMenu.classList.remove('show'); };
+        // TABS
+        function openTab(evt,name){document.querySelectorAll('.tab-content').forEach(d=>{d.style.display='none';d.style.opacity='0';});const s=document.getElementById(name);s.style.display='block';setTimeout(()=>s.style.opacity='1',10);}
+        function selectServer(id){window.location.href='/dashboard?guild='+id;}
+        function toggleServerMenu(){document.getElementById('serverMenu').classList.toggle('show');}
         
-        const form=document.getElementById('configForm'), saveBar=document.getElementById('saveBar'), inputs=document.querySelectorAll('.change-detect');
-        let initVals={}; 
-        inputs.forEach(i => { initVals[i.name] = i.type === 'checkbox' ? i.checked : i.value; i.addEventListener('change', checkChanges); i.addEventListener('input', checkChanges); });
-        function checkChanges(){ let chg=false; inputs.forEach(i => { const val = i.type === 'checkbox' ? i.checked : i.value; if(val !== initVals[i.name]) chg=true; }); saveBar.classList.toggle('show', chg); }
-        
-        // --- LÓGICA DE PERSONALIZADOR ---
-        const colorPicker = document.getElementById('colorPicker');
-        const embedPreview = document.getElementById('embedPreview');
-        const botNicknameInput = document.querySelector('input[name="botNickname"]');
-        const botNamePreview = document.querySelector('.bot-name-preview');
-        const botAvatarInput = document.getElementById('botAvatarInput'); // Input FILE
-        const previewAvatarImg = document.getElementById('previewAvatarImg');
-        const statusSelect = document.getElementById('statusSelect');
-        const previewStatusDot = document.getElementById('previewStatusDot');
-        const activityTypeSelect = document.getElementById('activityTypeSelect');
-        const activityTextInput = document.getElementById('activityTextInput');
-        const previewActivity = document.getElementById('previewActivity');
+        // VISIBILIDAD INICIAL
+        window.onload = function() { 
+            const p = document.getElementById('panel'); 
+            if(p) { p.style.display='block'; setTimeout(()=>p.style.opacity='1', 10); }
+            // Inicializar textos de los dropdowns
+            updateSelectText('dd-ignored'); updateSelectText('dd-admin'); updateSelectText('dd-mod');
+        };
 
+        // --- LÓGICA DE DROPDOWNS MULTI-SELECT ---
+        function toggleMultiSelect(id) {
+            const container = document.getElementById(id);
+            const box = container.querySelector('.select-box');
+            const opts = container.querySelector('.options-container');
+            
+            // Cerrar otros
+            document.querySelectorAll('.options-container').forEach(el => {
+                if(el !== opts) el.classList.remove('show');
+            });
+            document.querySelectorAll('.select-box').forEach(el => {
+                if(el !== box) el.classList.remove('active');
+            });
+
+            opts.classList.toggle('show');
+            box.classList.toggle('active');
+        }
+
+        // Actualizar texto "X seleccionados"
+        function updateSelectText(id) {
+            const container = document.getElementById(id);
+            if(!container) return;
+            const checked = container.querySelectorAll('input[type="checkbox"]:checked');
+            const textSpan = container.querySelector('.selected-text');
+            
+            if (checked.length === 0) {
+                textSpan.textContent = "Seleccionar...";
+                textSpan.style.color = "#888";
+            } else {
+                textSpan.textContent = `${checked.length} seleccionado(s)`;
+                textSpan.style.color = "#fff";
+            }
+            // Mostrar barra de guardado
+            document.getElementById('saveBar').classList.add('show');
+        }
+
+        // Cerrar dropdowns al hacer clic fuera
+        window.onclick = function(event) {
+            if (!event.target.closest('.multiselect-container')) {
+                document.querySelectorAll('.options-container').forEach(el => el.classList.remove('show'));
+                document.querySelectorAll('.select-box').forEach(el => el.classList.remove('active'));
+            }
+            if(!event.target.closest('.server-dropdown-container')) document.getElementById('serverMenu').classList.remove('show');
+        }
+
+        const form=document.getElementById('configForm'), saveBar=document.getElementById('saveBar'), inputs=document.querySelectorAll('.change-detect');
+        
+        // Evento para inputs normales
+        form.addEventListener('change',()=>saveBar.classList.add('show'));
+        
+        // Personalizador Logic (Preview y demás)
+        const colorPicker = document.getElementById('colorPicker'), embedPreview = document.getElementById('embedPreview'), botNicknameInput = document.querySelector('input[name="botNickname"]'), botNamePreview = document.querySelector('.bot-name-preview'), botAvatarInput = document.getElementById('botAvatarInput'), previewAvatarImg = document.getElementById('previewAvatarImg'), statusSelect = document.getElementById('statusSelect'), previewStatusDot = document.getElementById('previewStatusDot'), activityTypeSelect = document.getElementById('activityTypeSelect'), activityTextInput = document.getElementById('activityTextInput'), previewActivity = document.getElementById('previewActivity');
         if(colorPicker) colorPicker.addEventListener('input', (e) => embedPreview.style.borderLeftColor = e.target.value);
         if(botNicknameInput) botNicknameInput.addEventListener('input', (e) => botNamePreview.textContent = e.target.value || "Habbus");
-        
-        // NUEVO: Previsualizar imagen local
-        if(botAvatarInput) {
-            botAvatarInput.addEventListener('change', (e) => {
-                const file = e.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        previewAvatarImg.src = e.target.result; // Mostrar la imagen local inmediatamente
-                    }
-                    reader.readAsDataURL(file);
-                }
-            });
-        }
-
-        function updateStatusPreview() {
-            const typeMap = { "0": "Jugando a", "2": "Escuchando", "3": "Viendo", "5": "Compitiendo en" };
-            const typeText = typeMap[activityTypeSelect.value] || "";
-            const text = activityTextInput.value;
-            previewActivity.innerHTML = `${typeText} <strong>${text}</strong>`;
-            const statusColors = { "online": "#43b581", "idle": "#faa61a", "dnd": "#f04747", "invisible": "#747f8d" };
-            previewStatusDot.style.backgroundColor = statusColors[statusSelect.value] || "#43b581";
-        }
+        if(botAvatarInput) botAvatarInput.addEventListener('change', (e) => { const file = e.target.files[0]; if (file) { const reader = new FileReader(); reader.onload = function(e) { previewAvatarImg.src = e.target.result; }; reader.readAsDataURL(file); } });
+        function updateStatusPreview() { const typeMap = { "0": "Jugando a", "2": "Escuchando", "3": "Viendo", "5": "Compitiendo en" }; const typeText = typeMap[activityTypeSelect.value] || ""; const text = activityTextInput.value; previewActivity.innerHTML = `${typeText} <strong>${text}</strong>`; const statusColors = { "online": "#43b581", "idle": "#faa61a", "dnd": "#f04747", "invisible": "#747f8d" }; previewStatusDot.style.backgroundColor = statusColors[statusSelect.value] || "#43b581"; }
         if(statusSelect && activityTypeSelect && activityTextInput) { statusSelect.addEventListener('change', updateStatusPreview); activityTypeSelect.addEventListener('change', updateStatusPreview); activityTextInput.addEventListener('input', updateStatusPreview); updateStatusPreview(); }
 
-        // --- ENVÍO DEL FORMULARIO (USANDO fetch con FormData para archivos) ---
         form.addEventListener('submit', e => {
             e.preventDefault();
-            const formData = new FormData(form); // FormData maneja archivos automáticamente
-
-            fetch('/save-config', {
-                method: 'POST',
-                body: formData // No usamos URLSearchParams aquí porque hay archivos
-            }).then(r => {
-                if(r.ok){
-                    saveBar.classList.remove('show');
-                    // Actualizar valores iniciales (truco para inputs de texto, el de archivo es complejo de resetear en frontend)
-                    inputs.forEach(i => { if(i.type !== 'file') initVals[i.name] = i.type === 'checkbox' ? i.checked : i.value; });
-                    const t=document.getElementById('successToast'); t.classList.add('active'); setTimeout(()=>t.classList.remove('active'),3000);
-                } else {
-                    alert("Error al guardar. Revisa la consola.");
-                }
+            const formData = new FormData(form);
+            fetch('/save-config', { method: 'POST', body: formData }).then(r => {
+                if(r.ok){ 
+                    saveBar.classList.remove('show'); 
+                    const t=document.getElementById('successToast'); t.classList.add('active'); setTimeout(()=>t.classList.remove('active'),3000); 
+                } else { alert("Error al guardar."); }
             }).catch(err => { console.error(err); alert("Error de red."); });
         });
     </script>
