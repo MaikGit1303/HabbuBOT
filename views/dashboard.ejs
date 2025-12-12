@@ -310,19 +310,38 @@
 
     <script>
         // TABS
-        function openTab(evt,name){document.querySelectorAll('.tab-content').forEach(d=>{d.style.display='none';d.style.opacity='0';});const s=document.getElementById(name);s.style.display='block';setTimeout(()=>s.style.opacity='1',10);}
-        function selectServer(id){window.location.href='/dashboard?guild='+id;}
-        function toggleServerMenu(){document.getElementById('serverMenu').classList.toggle('show');}
-        
-        // VISIBILIDAD INICIAL
-        window.onload = function() { 
-            const p = document.getElementById('panel'); 
-            if(p) { p.style.display='block'; setTimeout(()=>p.style.opacity='1', 10); }
-            // Inicializar textos de los dropdowns
-            updateSelectText('dd-ignored'); updateSelectText('dd-admin'); updateSelectText('dd-mod');
-        };
+        function openTab(evt, tabName) { 
+            document.querySelectorAll('.tab-content').forEach(d => {
+                d.style.display='none'; 
+                d.style.opacity='0';
+            });
+            document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
+            
+            const sel = document.getElementById(tabName);
+            if(sel) { 
+                sel.style.display='block'; 
+                setTimeout(()=>sel.style.opacity='1', 10); 
+            }
+            if(evt) evt.currentTarget.classList.add('active');
+        }
 
-        // --- LÓGICA DE DROPDOWNS MULTI-SELECT ---
+        document.getElementById('sidebarToggle').addEventListener('click', () => document.getElementById('sidebar').classList.toggle('collapsed'));
+        
+        const serverMenu = document.getElementById('serverMenu');
+        function toggleServerMenu() { serverMenu.classList.toggle('show'); }
+        function selectServer(id) { window.location.href = '/dashboard?guild=' + id; }
+        window.onclick = e => { if(!e.target.closest('.server-dropdown-container')) serverMenu.classList.remove('show'); };
+        
+        // --- DETECCIÓN DE CAMBIOS (CORREGIDA) ---
+        const form = document.getElementById('configForm');
+        const saveBar = document.getElementById('saveBar');
+        const inputs = document.querySelectorAll('.change-detect');
+        
+        // Solo mostramos la barra cuando el USUARIO toca algo
+        form.addEventListener('change', () => saveBar.classList.add('show'));
+        form.addEventListener('input', () => saveBar.classList.add('show'));
+
+        // --- LÓGICA DROPDOWNS MULTI-SELECT ---
         function toggleMultiSelect(id) {
             const container = document.getElementById(id);
             const box = container.querySelector('.select-box');
@@ -340,7 +359,7 @@
             box.classList.toggle('active');
         }
 
-        // Actualizar texto "X seleccionados"
+        // Actualizar texto "X seleccionados" (SIN ACTIVAR LA BARRA DE GUARDADO)
         function updateSelectText(id) {
             const container = document.getElementById(id);
             if(!container) return;
@@ -354,11 +373,11 @@
                 textSpan.textContent = `${checked.length} seleccionado(s)`;
                 textSpan.style.color = "#fff";
             }
-            // Mostrar barra de guardado
-            document.getElementById('saveBar').classList.add('show');
+            // *** ELIMINÉ LA LÍNEA QUE ACTIVABA LA BARRA AQUÍ ***
+            // La barra ahora se activa sola gracias al evento 'change' del formulario
         }
 
-        // Cerrar dropdowns al hacer clic fuera
+        // Cerrar al hacer clic fuera
         window.onclick = function(event) {
             if (!event.target.closest('.multiselect-container')) {
                 document.querySelectorAll('.options-container').forEach(el => el.classList.remove('show'));
@@ -367,19 +386,39 @@
             if(!event.target.closest('.server-dropdown-container')) document.getElementById('serverMenu').classList.remove('show');
         }
 
-        const form=document.getElementById('configForm'), saveBar=document.getElementById('saveBar'), inputs=document.querySelectorAll('.change-detect');
-        
-        // Evento para inputs normales
-        form.addEventListener('change',()=>saveBar.classList.add('show'));
-        
-        // Personalizador Logic (Preview y demás)
-        const colorPicker = document.getElementById('colorPicker'), embedPreview = document.getElementById('embedPreview'), botNicknameInput = document.querySelector('input[name="botNickname"]'), botNamePreview = document.querySelector('.bot-name-preview'), botAvatarInput = document.getElementById('botAvatarInput'), previewAvatarImg = document.getElementById('previewAvatarImg'), statusSelect = document.getElementById('statusSelect'), previewStatusDot = document.getElementById('previewStatusDot'), activityTypeSelect = document.getElementById('activityTypeSelect'), activityTextInput = document.getElementById('activityTextInput'), previewActivity = document.getElementById('previewActivity');
+        // --- LÓGICA DE PERSONALIZADOR ---
+        const colorPicker = document.getElementById('colorPicker');
+        const embedPreview = document.getElementById('embedPreview');
+        const botNicknameInput = document.querySelector('input[name="botNickname"]');
+        const botNamePreview = document.querySelector('.bot-name-preview');
+        const botAvatarInput = document.getElementById('botAvatarInput');
+        const previewAvatarImg = document.getElementById('previewAvatarImg');
+        const statusSelect = document.getElementById('statusSelect');
+        const previewStatusDot = document.getElementById('previewStatusDot');
+        const activityTypeSelect = document.getElementById('activityTypeSelect');
+        const activityTextInput = document.getElementById('activityTextInput');
+        const previewActivity = document.getElementById('previewActivity');
+
         if(colorPicker) colorPicker.addEventListener('input', (e) => embedPreview.style.borderLeftColor = e.target.value);
         if(botNicknameInput) botNicknameInput.addEventListener('input', (e) => botNamePreview.textContent = e.target.value || "Habbus");
         if(botAvatarInput) botAvatarInput.addEventListener('change', (e) => { const file = e.target.files[0]; if (file) { const reader = new FileReader(); reader.onload = function(e) { previewAvatarImg.src = e.target.result; }; reader.readAsDataURL(file); } });
-        function updateStatusPreview() { const typeMap = { "0": "Jugando a", "2": "Escuchando", "3": "Viendo", "5": "Compitiendo en" }; const typeText = typeMap[activityTypeSelect.value] || ""; const text = activityTextInput.value; previewActivity.innerHTML = `${typeText} <strong>${text}</strong>`; const statusColors = { "online": "#43b581", "idle": "#faa61a", "dnd": "#f04747", "invisible": "#747f8d" }; previewStatusDot.style.backgroundColor = statusColors[statusSelect.value] || "#43b581"; }
-        if(statusSelect && activityTypeSelect && activityTextInput) { statusSelect.addEventListener('change', updateStatusPreview); activityTypeSelect.addEventListener('change', updateStatusPreview); activityTextInput.addEventListener('input', updateStatusPreview); updateStatusPreview(); }
+        
+        function updateStatusPreview() { 
+            const typeMap = { "0": "Jugando a", "2": "Escuchando", "3": "Viendo", "5": "Compitiendo en" };
+            const typeText = typeMap[activityTypeSelect.value] || "";
+            const text = activityTextInput.value;
+            previewActivity.innerHTML = `${typeText} <strong>${text}</strong>`;
+            const statusColors = { "online": "#43b581", "idle": "#faa61a", "dnd": "#f04747", "invisible": "#747f8d" };
+            previewStatusDot.style.backgroundColor = statusColors[statusSelect.value] || "#43b581";
+        }
+        if(statusSelect && activityTypeSelect && activityTextInput) { 
+            statusSelect.addEventListener('change', updateStatusPreview); 
+            activityTypeSelect.addEventListener('change', updateStatusPreview); 
+            activityTextInput.addEventListener('input', updateStatusPreview); 
+            updateStatusPreview(); 
+        }
 
+        // --- ENVIAR FORMULARIO ---
         form.addEventListener('submit', e => {
             e.preventDefault();
             const formData = new FormData(form);
@@ -390,6 +429,17 @@
                 } else { alert("Error al guardar."); }
             }).catch(err => { console.error(err); alert("Error de red."); });
         });
+
+        // --- INICIALIZAR TEXTOS Y VISIBILIDAD ---
+        window.onload = function() { 
+            const p = document.getElementById('panel'); 
+            if(p) { p.style.display='block'; setTimeout(()=>p.style.opacity='1', 10); }
+            ñ
+            // Calculamos los textos iniciales sin activar la barra
+            updateSelectText('dd-ignored'); 
+            updateSelectText('dd-admin'); 
+            updateSelectText('dd-mod');
+        };
     </script>
 </body>
 </html>
