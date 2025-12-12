@@ -5,31 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard - Habbus</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Fira+Code:wght@500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/dashboard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
 
-    <%
-        // Verificaciones para variables indefinidas
-        if (!stats) stats = { status: 'Offline', servers: 0, ping: 0 };
-        if (!config) config = {
-            prefix: '!', language: 'es', timezone: 'America/Bogota',
-            ignoredChannels: [], adminRole: [], modRole: [], muteRole: '',
-            automodBadWords: false, automodLinks: false,
-            logChannel: '', logMessages: false, logMembers: false,
-            botNickname: 'Habbus', botAvatar: '', embedColor: '#ff0f0f',
-            botStatus: 'online', activityType: 0, activityText: 'Navidad',
-            welcomeEnabled: false, welcomeChannel: '', welcomeMessage: '¡Bienvenido {user} a {server}!'
-        };
-        if (!user) user = { username: 'Usuario', id: '0', avatar: '0' };
-        if (!servers) servers = [];
-        if (!channels) channels = [];
-        if (!roles) roles = [];
-        if (!selectedGuildId) selectedGuildId = '';
-    %>
-
-    <%
+    <% 
+        let currentServer = { name: "Sin servidores", icon: "https://cdn.discordapp.com/embed/avatars/0.png", id: "" };
         if (typeof servers !== 'undefined' && servers.length > 0) {
             if (typeof selectedGuildId !== 'undefined' && selectedGuildId) {
                 const found = servers.find(s => s.id === selectedGuildId);
@@ -134,19 +118,13 @@
                 <input type="hidden" name="guildId" id="guildIdInput" value="<%= currentServer.id %>">
 
                 <div id="panel" class="tab-content active" style="display: block; opacity: 1;">
-                    <div class="content-header">
-                        <h1>Panel de Control</h1>
-                        <p>Gestiona los módulos de <strong><%= currentServer.name %></strong></p>
-                    </div>
-
+                    <div class="content-header"><h1>Panel de Control</h1><p>Gestiona los módulos de <strong><%= currentServer.name %></strong></p></div>
                     <div class="stats-grid">
                         <div class="stat-card"><i class="fa-solid fa-signal" style="color: #43b581;"></i><div><h3><%= stats.status %></h3><span>Estado</span></div></div>
                         <div class="stat-card"><i class="fa-solid fa-server" style="color: #5865F2;"></i><div><h3><%= stats.servers %></h3><span>Servidores</span></div></div>
                         <div class="stat-card"><i class="fa-solid fa-bolt" style="color: #ffc107;"></i><div><h3><%= stats.ping %>ms</h3><span>Latencia</span></div></div>
                     </div>
-
                     <hr class="divider">
-
                     <h3 class="section-title"><i class="fa-solid fa-server"></i> Gestión del Servidor</h3>
                     <div class="modules-grid">
                         <div class="module-card"><div class="module-header"><div class="module-icon blue-icon"><i class="fa-solid fa-hand-spock"></i></div></div><h4>Bienvenidas</h4><p>Configura mensajes de entrada.</p><button type="button" class="btn-module" onclick="openTab(null, 'bienvenida')">Configurar</button></div>
@@ -156,7 +134,6 @@
                         <div class="module-card"><div class="module-header"><div class="module-icon green-icon"><i class="fa-solid fa-user-check"></i></div></div><h4>Verificación</h4><p>Sistema de captcha.</p><button type="button" class="btn-module" onclick="openTab(null, 'construccion')">+ Habilitar</button></div>
                         <div class="module-card"><div class="module-header"><div class="module-icon purple-icon"><i class="fa-solid fa-file-lines"></i></div></div><h4>Registros</h4><p>Logs de auditoría.</p><button type="button" class="btn-module" onclick="openTab(null, 'registros')">+ Habilitar</button></div>
                     </div>
-
                     <h3 class="section-title"><i class="fa-solid fa-toolbox"></i> Utilidades</h3>
                     <div class="modules-grid">
                         <div class="module-card"><div class="module-header"><div class="module-icon yellow-icon"><i class="fa-solid fa-id-card"></i></div></div><h4>Roles Reacción</h4><p>Roles por clic en emoji.</p><button type="button" class="btn-module" onclick="openTab(null, 'construccion')">Configurar</button></div>
@@ -170,9 +147,17 @@
                         <div class="setting-row" style="align-items: flex-start;">
                             <div class="setting-info" style="flex: 1;">
                                 <div style="margin-bottom: 20px;"><label>Apodo en este Servidor</label><input type="text" name="botNickname" value="<%= config.botNickname || 'Habbus' %>" class="form-input change-detect" placeholder="Ej: Santa Claus"></div>
-                                <div style="margin-bottom: 20px;"><label>Avatar del Servidor</label><span class="desc">Sube una imagen (PNG o JPG, máx 8MB).</span><input type="file" id="botAvatarInput" name="botAvatarFile" accept="image/*" class="form-input change-detect" style="padding: 8px;"></div>
+                                <div style="margin-bottom: 20px;">
+                                    <label>Avatar del Servidor</label><span class="desc">Sube una imagen (PNG o JPG, máx 8MB).</span>
+                                    <div class="file-input-wrapper">
+                                        <input type="file" id="botAvatarInput" name="botAvatarFile" accept="image/png, image/jpeg, image/jpg" class="hidden-file-input change-detect">
+                                        <label for="botAvatarInput" class="custom-file-btn">
+                                            <i class="fa-solid fa-cloud-arrow-up"></i> <span id="fileNameDisplay">Seleccionar Imagen</span>
+                                        </label>
+                                    </div>
+                                </div>
                                 <div style="margin-bottom: 20px;"><label>Estado del Bot</label><select name="botStatus" id="statusSelect" class="form-input change-detect"><option value="online" <%= config.botStatus === 'online' ? 'selected' : '' %>>🟢 En Línea</option><option value="idle" <%= config.botStatus === 'idle' ? 'selected' : '' %>>🌙 Ausente</option><option value="dnd" <%= config.botStatus === 'dnd' ? 'selected' : '' %>>⛔ No Molestar</option><option value="invisible" <%= config.botStatus === 'invisible' ? 'selected' : '' %>>👻 Invisible</option></select></div>
-                                <div style="display: flex; gap: 10px;"><div style="flex: 1;"><label>Tipo</label><select name="activityType" id="activityTypeSelect" class="form-input change-detect"><option value="0" <%= config.activityType === 0 ? 'selected' : '' %>>Jugando a</option><option value="3" <%= config.activityType === 3 ? 'selected' : '' %>>Viendo</option><option value="2" <%= config.activityType === 2 ? 'selected' : '' %>>Escuchando</option><option value="5" <%= config.activityType === 5 ? 'selected' : '' %>>Compitiendo en</option></select></div><div style="flex: 2;"><label>Texto</label><input type="text" name="activityText" id="activityTextInput" value="<%= config.activityText || 'Navidad' %>" class="form-input change-detect"></div></div>
+                                <div style="display: flex; gap: 10px;"><div style="flex: 1;"><label>Tipo Actividad</label><select name="activityType" id="activityTypeSelect" class="form-input change-detect"><option value="0" <%= config.activityType === 0 ? 'selected' : '' %>>Jugando a</option><option value="3" <%= config.activityType === 3 ? 'selected' : '' %>>Viendo</option><option value="2" <%= config.activityType === 2 ? 'selected' : '' %>>Escuchando</option><option value="5" <%= config.activityType === 5 ? 'selected' : '' %>>Compitiendo en</option></select></div><div style="flex: 2;"><label>Texto de Actividad</label><input type="text" name="activityText" id="activityTextInput" value="<%= config.activityText || 'Navidad' %>" class="form-input change-detect"></div></div>
                             </div>
                             <div class="setting-input" style="flex: 0 0 320px; margin-left: 40px;">
                                 <label style="margin-bottom: 10px; display: block;">Vista Previa</label>
@@ -208,6 +193,11 @@
                             <div class="setting-input"><select name="timezone" class="form-input change-detect"><option value="America/Bogota" <%= config.timezone === 'America/Bogota' ? 'selected' : '' %>>🇨🇴 Colombia</option><option value="America/Mexico_City" <%= config.timezone === 'America/Mexico_City' ? 'selected' : '' %>>🇲🇽 México</option><option value="Europe/Madrid" <%= config.timezone === 'Europe/Madrid' ? 'selected' : '' %>>🇪🇸 España</option><option value="America/New_York" <%= config.timezone === 'America/New_York' ? 'selected' : '' %>>🇺🇸 USA Este</option></select></div>
                         </div>
 
+                        <div class="setting-row" style="align-items: center; justify-content: space-between;">
+                            <div class="setting-info"><label>Respuestas Silenciosas</label></div>
+                            <label class="switch"><input type="checkbox" name="ephemeralReplies" class="change-detect" <%= config.ephemeralReplies ? 'checked' : '' %>><span class="slider round"></span></label>
+                        </div>
+
                         <hr class="divider">
 
                         <div class="setting-row">
@@ -216,9 +206,9 @@
                                 <div class="multiselect-container" id="dd-ignored">
                                     <div class="select-box" onclick="toggleMultiSelect('dd-ignored')"><span class="selected-text">Seleccionar canales...</span><i class="fa-solid fa-chevron-down"></i></div>
                                     <div class="options-container">
-                                        <% if(channels){ channels.forEach(c => { let isChecked = config.ignoredChannels && (Array.isArray(config.ignoredChannels) ? config.ignoredChannels.includes(c.id) : config.ignoredChannels == c.id); %>
+                                        <% if(typeof channels !== 'undefined' && channels.length > 0){ channels.forEach(c => { let isChecked = config.ignoredChannels && (Array.isArray(config.ignoredChannels) ? config.ignoredChannels.includes(c.id) : config.ignoredChannels == c.id); %>
                                             <label class="option-item"><input type="checkbox" name="ignoredChannels" value="<%= c.id %>" <%= isChecked ? 'checked' : '' %> onchange="updateSelectText('dd-ignored')"><span># <%= c.name %></span></label>
-                                        <% }) } %>
+                                        <% }) } else { %><div style="color: #888; padding: 10px;">Sin canales.</div><% } %>
                                     </div>
                                 </div>
                             </div>
@@ -226,6 +216,13 @@
 
                         <hr class="divider">
                         <h3>Jerarquía y Permisos</h3>
+                        
+                        <p style="margin-bottom: 25px; color: #b9bbbe; font-size: 0.9rem; line-height: 1.5; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; border-left: 3px solid var(--accent);">
+                            Define qué roles tienen autoridad sobre el bot.<br>
+                            • <strong>Administrador:</strong> Acceso total al panel y configuración.<br>
+                            • <strong>Moderador:</strong> Puede usar comandos de ban, kick y mute.<br>
+                            • <strong>Silenciado:</strong> Rol que se asignará a los usuarios castigados.
+                        </p>
 
                         <div class="setting-row">
                             <div class="setting-info"><label>Roles Admin</label><span class="desc">Acceso total.</span></div>
@@ -233,7 +230,7 @@
                                 <div class="multiselect-container" id="dd-admin">
                                     <div class="select-box" onclick="toggleMultiSelect('dd-admin')"><span class="selected-text">Seleccionar roles...</span><i class="fa-solid fa-chevron-down"></i></div>
                                     <div class="options-container">
-                                        <% if(roles){ roles.forEach(r => { let isChecked = config.adminRole && (Array.isArray(config.adminRole) ? config.adminRole.includes(r.id) : config.adminRole == r.id); let textColor = r.color === '#000000' ? '#ddd' : r.color; %>
+                                        <% if(typeof roles !== 'undefined' && roles.length > 0){ roles.forEach(r => { let isChecked = config.adminRole && (Array.isArray(config.adminRole) ? config.adminRole.includes(r.id) : config.adminRole == r.id); let textColor = r.color === '#000000' ? '#ddd' : r.color; %>
                                             <label class="option-item"><input type="checkbox" name="adminRole" value="<%= r.id %>" <%= isChecked ? 'checked' : '' %> onchange="updateSelectText('dd-admin')"><span class="role-dot-small" style="background-color: <%= r.color %>;"></span><span style="color: <%= textColor %>"><%= r.name %></span></label>
                                         <% }) } else { %><div style="color: #888; padding: 10px;">Sin roles.</div><% } %>
                                     </div>
@@ -247,7 +244,7 @@
                                 <div class="multiselect-container" id="dd-mod">
                                     <div class="select-box" onclick="toggleMultiSelect('dd-mod')"><span class="selected-text">Seleccionar roles...</span><i class="fa-solid fa-chevron-down"></i></div>
                                     <div class="options-container">
-                                        <% if(roles){ roles.forEach(r => { let isChecked = config.modRole && (Array.isArray(config.modRole) ? config.modRole.includes(r.id) : config.modRole == r.id); let textColor = r.color === '#000000' ? '#ddd' : r.color; %>
+                                        <% if(typeof roles !== 'undefined' && roles.length > 0){ roles.forEach(r => { let isChecked = config.modRole && (Array.isArray(config.modRole) ? config.modRole.includes(r.id) : config.modRole == r.id); let textColor = r.color === '#000000' ? '#ddd' : r.color; %>
                                             <label class="option-item"><input type="checkbox" name="modRole" value="<%= r.id %>" <%= isChecked ? 'checked' : '' %> onchange="updateSelectText('dd-mod')"><span class="role-dot-small" style="background-color: <%= r.color %>;"></span><span style="color: <%= textColor %>"><%= r.name %></span></label>
                                         <% }) } %>
                                     </div>
@@ -311,17 +308,10 @@
     <script>
         // TABS
         function openTab(evt, tabName) { 
-            document.querySelectorAll('.tab-content').forEach(d => {
-                d.style.display='none'; 
-                d.style.opacity='0';
-            });
+            document.querySelectorAll('.tab-content').forEach(d => {d.style.display='none'; d.style.opacity='0';});
             document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
-            
             const sel = document.getElementById(tabName);
-            if(sel) { 
-                sel.style.display='block'; 
-                setTimeout(()=>sel.style.opacity='1', 10); 
-            }
+            if(sel) { sel.style.display='block'; setTimeout(()=>sel.style.opacity='1', 10); }
             if(evt) evt.currentTarget.classList.add('active');
         }
 
@@ -332,52 +322,33 @@
         function selectServer(id) { window.location.href = '/dashboard?guild=' + id; }
         window.onclick = e => { if(!e.target.closest('.server-dropdown-container')) serverMenu.classList.remove('show'); };
         
-        // --- DETECCIÓN DE CAMBIOS (CORREGIDA) ---
-        const form = document.getElementById('configForm');
-        const saveBar = document.getElementById('saveBar');
-        const inputs = document.querySelectorAll('.change-detect');
-        
-        // Solo mostramos la barra cuando el USUARIO toca algo
-        form.addEventListener('change', () => saveBar.classList.add('show'));
-        form.addEventListener('input', () => saveBar.classList.add('show'));
+        const form=document.getElementById('configForm'), saveBar=document.getElementById('saveBar');
+        // Fix de barra: Solo mostrar si el usuario cambia algo
+        form.addEventListener('change',()=>saveBar.classList.add('show'));
+        form.addEventListener('input',()=>saveBar.classList.add('show'));
 
-        // --- LÓGICA DROPDOWNS MULTI-SELECT ---
+        // Visibilidad inicial
+        window.onload = function() { 
+            const p = document.getElementById('panel'); if(p) { p.style.display='block'; setTimeout(()=>p.style.opacity='1', 10); } 
+            updateSelectText('dd-ignored'); updateSelectText('dd-admin'); updateSelectText('dd-mod');
+        };
+
+        // MultiSelect Logic
         function toggleMultiSelect(id) {
             const container = document.getElementById(id);
             const box = container.querySelector('.select-box');
             const opts = container.querySelector('.options-container');
-            
-            // Cerrar otros
-            document.querySelectorAll('.options-container').forEach(el => {
-                if(el !== opts) el.classList.remove('show');
-            });
-            document.querySelectorAll('.select-box').forEach(el => {
-                if(el !== box) el.classList.remove('active');
-            });
-
-            opts.classList.toggle('show');
-            box.classList.toggle('active');
+            document.querySelectorAll('.options-container').forEach(el => { if(el!==opts) el.classList.remove('show'); });
+            document.querySelectorAll('.select-box').forEach(el => { if(el!==box) el.classList.remove('active'); });
+            opts.classList.toggle('show'); box.classList.toggle('active');
         }
-
-        // Actualizar texto "X seleccionados" (SIN ACTIVAR LA BARRA DE GUARDADO)
         function updateSelectText(id) {
-            const container = document.getElementById(id);
-            if(!container) return;
+            const container = document.getElementById(id); if(!container) return;
             const checked = container.querySelectorAll('input[type="checkbox"]:checked');
             const textSpan = container.querySelector('.selected-text');
-            
-            if (checked.length === 0) {
-                textSpan.textContent = "Seleccionar...";
-                textSpan.style.color = "#888";
-            } else {
-                textSpan.textContent = `${checked.length} seleccionado(s)`;
-                textSpan.style.color = "#fff";
-            }
-            // *** ELIMINÉ LA LÍNEA QUE ACTIVABA LA BARRA AQUÍ ***
-            // La barra ahora se activa sola gracias al evento 'change' del formulario
+            if (checked.length === 0) { textSpan.textContent = "Seleccionar..."; textSpan.style.color = "#888"; } 
+            else { textSpan.textContent = `${checked.length} seleccionado(s)`; textSpan.style.color = "#fff"; }
         }
-
-        // Cerrar al hacer clic fuera
         window.onclick = function(event) {
             if (!event.target.closest('.multiselect-container')) {
                 document.querySelectorAll('.options-container').forEach(el => el.classList.remove('show'));
@@ -386,60 +357,25 @@
             if(!event.target.closest('.server-dropdown-container')) document.getElementById('serverMenu').classList.remove('show');
         }
 
-        // --- LÓGICA DE PERSONALIZADOR ---
-        const colorPicker = document.getElementById('colorPicker');
-        const embedPreview = document.getElementById('embedPreview');
-        const botNicknameInput = document.querySelector('input[name="botNickname"]');
-        const botNamePreview = document.querySelector('.bot-name-preview');
+        // File Input Text
         const botAvatarInput = document.getElementById('botAvatarInput');
-        const previewAvatarImg = document.getElementById('previewAvatarImg');
-        const statusSelect = document.getElementById('statusSelect');
-        const previewStatusDot = document.getElementById('previewStatusDot');
-        const activityTypeSelect = document.getElementById('activityTypeSelect');
-        const activityTextInput = document.getElementById('activityTextInput');
-        const previewActivity = document.getElementById('previewActivity');
+        if(botAvatarInput) botAvatarInput.addEventListener('change', (e) => { 
+            const file = e.target.files[0]; 
+            if(file) document.getElementById('fileNameDisplay').textContent = file.name; 
+        });
 
+        // Personalizador Preview
+        const colorPicker = document.getElementById('colorPicker'), embedPreview = document.getElementById('embedPreview'), botNicknameInput = document.querySelector('input[name="botNickname"]'), botNamePreview = document.querySelector('.bot-name-preview'), previewAvatarImg = document.getElementById('previewAvatarImg'), statusSelect = document.getElementById('statusSelect'), previewStatusDot = document.getElementById('previewStatusDot'), activityTypeSelect = document.getElementById('activityTypeSelect'), activityTextInput = document.getElementById('activityTextInput'), previewActivity = document.getElementById('previewActivity');
         if(colorPicker) colorPicker.addEventListener('input', (e) => embedPreview.style.borderLeftColor = e.target.value);
         if(botNicknameInput) botNicknameInput.addEventListener('input', (e) => botNamePreview.textContent = e.target.value || "Habbus");
         if(botAvatarInput) botAvatarInput.addEventListener('change', (e) => { const file = e.target.files[0]; if (file) { const reader = new FileReader(); reader.onload = function(e) { previewAvatarImg.src = e.target.result; }; reader.readAsDataURL(file); } });
-        
-        function updateStatusPreview() { 
-            const typeMap = { "0": "Jugando a", "2": "Escuchando", "3": "Viendo", "5": "Compitiendo en" };
-            const typeText = typeMap[activityTypeSelect.value] || "";
-            const text = activityTextInput.value;
-            previewActivity.innerHTML = `${typeText} <strong>${text}</strong>`;
-            const statusColors = { "online": "#43b581", "idle": "#faa61a", "dnd": "#f04747", "invisible": "#747f8d" };
-            previewStatusDot.style.backgroundColor = statusColors[statusSelect.value] || "#43b581";
-        }
-        if(statusSelect && activityTypeSelect && activityTextInput) { 
-            statusSelect.addEventListener('change', updateStatusPreview); 
-            activityTypeSelect.addEventListener('change', updateStatusPreview); 
-            activityTextInput.addEventListener('input', updateStatusPreview); 
-            updateStatusPreview(); 
-        }
+        function updateStatusPreview() { const typeMap = { "0": "Jugando a", "2": "Escuchando", "3": "Viendo", "5": "Compitiendo en" }; const typeText = typeMap[activityTypeSelect.value] || ""; const text = activityTextInput.value; previewActivity.innerHTML = `${typeText} <strong>${text}</strong>`; const statusColors = { "online": "#43b581", "idle": "#faa61a", "dnd": "#f04747", "invisible": "#747f8d" }; previewStatusDot.style.backgroundColor = statusColors[statusSelect.value] || "#43b581"; }
+        if(statusSelect && activityTypeSelect && activityTextInput) { statusSelect.addEventListener('change', updateStatusPreview); activityTypeSelect.addEventListener('change', updateStatusPreview); activityTextInput.addEventListener('input', updateStatusPreview); updateStatusPreview(); }
 
-        // --- ENVIAR FORMULARIO ---
         form.addEventListener('submit', e => {
-            e.preventDefault();
-            const formData = new FormData(form);
-            fetch('/save-config', { method: 'POST', body: formData }).then(r => {
-                if(r.ok){ 
-                    saveBar.classList.remove('show'); 
-                    const t=document.getElementById('successToast'); t.classList.add('active'); setTimeout(()=>t.classList.remove('active'),3000); 
-                } else { alert("Error al guardar."); }
-            }).catch(err => { console.error(err); alert("Error de red."); });
+            e.preventDefault(); const fd=new FormData(form);
+            fetch('/save-config',{method:'POST',body:fd}).then(r=>{if(r.ok){saveBar.classList.remove('show');document.getElementById('successToast').classList.add('active');setTimeout(()=>document.getElementById('successToast').classList.remove('active'),2000)}});
         });
-
-        // --- INICIALIZAR TEXTOS Y VISIBILIDAD ---
-        window.onload = function() { 
-            const p = document.getElementById('panel'); 
-            if(p) { p.style.display='block'; setTimeout(()=>p.style.opacity='1', 10); }
-            ñ
-            // Calculamos los textos iniciales sin activar la barra
-            updateSelectText('dd-ignored'); 
-            updateSelectText('dd-admin'); 
-            updateSelectText('dd-mod');
-        };
     </script>
 </body>
 </html>
