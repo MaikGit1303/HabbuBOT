@@ -68,54 +68,70 @@
         
         <aside class="sidebar" id="sidebar">
             <div class="menu-section">
-                <div class="menu-item active" onclick="openTab(event, 'panel')"><i class="fa-solid fa-border-all"></i> <span class="link-text">Panel de control</span></div>
-                <div class="menu-item" onclick="openTab(event, 'personalizador')"><i class="fa-solid fa-wand-magic-sparkles"></i> <span class="link-text">Personalizador</span></div>
-                <div class="menu-item" onclick="openTab(event, 'ajustes')"><i class="fa-solid fa-gear"></i> <span class="link-text">Ajustes</span></div>
-                <div class="menu-item" onclick="openTab(event, 'premium')"><i class="fa-solid fa-crown" style="color: var(--gold);"></i> <span class="link-text">Premium</span></div>
-                <div class="menu-item" onclick="openTab(event, 'emojis')"><i class="fa-solid fa-icons"></i> <span class="link-text">Emojis</span></div>
+                <div class="menu-item" onclick="openTab(event, 'consola')" style="color: #43b581;"><i class="fa-solid fa-terminal"></i> Consola en Vivo</div>
+                <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.1); margin: 10px 0;">
+                
+                <div class="menu-item active" onclick="openTab(event, 'panel')"><i class="fa-solid fa-border-all"></i> Panel de control</div>
+                <div class="menu-item" onclick="openTab(event, 'personalizador')"><i class="fa-solid fa-wand-magic-sparkles"></i> Personalizador</div>
+                <div class="menu-item" onclick="openTab(event, 'ajustes')"><i class="fa-solid fa-gear"></i> Ajustes</div>
+                <div class="menu-item" onclick="openTab(event, 'premium')"><i class="fa-solid fa-crown" style="color: var(--gold);"></i> Premium</div>
+                <div class="menu-item" onclick="openTab(event, 'emojis')"><i class="fa-solid fa-icons"></i> Emojis</div>
             </div>
             <div class="menu-section">
                 <span class="menu-header">GESTIÓN DEL SERVIDOR</span>
-                <div class="menu-item" onclick="openTab(event, 'bienvenida')"><i class="fa-solid fa-hand-spock"></i> <span class="link-text">Bienvenidas</span></div>
-                <div class="menu-item" onclick="openTab(event, 'construccion')"><i class="fa-solid fa-door-open"></i> <span class="link-text">Canal Bienvenida</span></div>
-                <div class="menu-item" onclick="openTab(event, 'moderacion')"><i class="fa-solid fa-gavel"></i> <span class="link-text">Moderación</span></div>
-                <div class="menu-item" onclick="openTab(event, 'construccion')"><i class="fa-solid fa-medal"></i> <span class="link-text">Logros</span></div>
-                <div class="menu-item" onclick="openTab(event, 'construccion')"><i class="fa-solid fa-user-check"></i> <span class="link-text">Verificación</span></div>
-                <div class="menu-item" onclick="openTab(event, 'registros')"><i class="fa-solid fa-file-lines"></i> <span class="link-text">Registros</span></div>
+                <div class="menu-item" onclick="openTab(event, 'bienvenida')"><i class="fa-solid fa-hand-spock"></i> Bienvenidas</div>
+                <div class="menu-item" onclick="openTab(event, 'construccion')"><i class="fa-solid fa-door-open"></i> Canal Bienvenida</div>
+                <div class="menu-item" onclick="openTab(event, 'moderacion')"><i class="fa-solid fa-gavel"></i> Moderación</div>
+                <div class="menu-item" onclick="openTab(event, 'construccion')"><i class="fa-solid fa-medal"></i> Logros</div>
+                <div class="menu-item" onclick="openTab(event, 'construccion')"><i class="fa-solid fa-user-check"></i> Verificación</div>
+                <div class="menu-item" onclick="openTab(event, 'registros')"><i class="fa-solid fa-file-lines"></i> Registros</div>
             </div>
             <div class="menu-section">
                 <span class="menu-header">UTILIDADES</span>
-                <div class="menu-item" onclick="openTab(event, 'construccion')"><i class="fa-solid fa-id-card"></i> <span class="link-text">Roles Reacción</span></div>
-                <div class="menu-item" onclick="openTab(event, 'construccion')"><i class="fa-solid fa-pen-to-square"></i> <span class="link-text">Embeds</span></div>
-                <div class="menu-item" onclick="openTab(event, 'construccion')"><i class="fa-solid fa-rss"></i> <span class="link-text">Alertas Sociales</span></div>
-                <div class="menu-item" onclick="openTab(event, 'construccion')"><i class="fa-solid fa-robot"></i> <span class="link-text">Automatizaciones</span></div>
-                <div class="menu-item" onclick="openTab(event, 'construccion')"><i class="fa-solid fa-terminal"></i> <span class="link-text">Comandos</span></div>
-                <div class="menu-item" onclick="openTab(event, 'construccion')"><i class="fa-solid fa-user-plus"></i> <span class="link-text">Rastreador</span></div>
-                <div class="menu-item" onclick="openTab(event, 'construccion')"><i class="fa-solid fa-ticket"></i> <span class="link-text">Tickets</span></div>
+                <div class="menu-item" onclick="openTab(event, 'construccion')"><i class="fa-solid fa-id-card"></i> Roles Reacción</div>
+                <div class="menu-item" onclick="openTab(event, 'construccion')"><i class="fa-solid fa-pen-to-square"></i> Embeds</div>
+                <div class="menu-item" onclick="openTab(event, 'construccion')"><i class="fa-solid fa-rss"></i> Alertas Sociales</div>
+                <div class="menu-item" onclick="openTab(event, 'construccion')"><i class="fa-solid fa-robot"></i> Automatizaciones</div>
+                <div class="menu-item" onclick="openTab(event, 'construccion')"><i class="fa-solid fa-terminal"></i> Comandos</div>
+                <div class="menu-item" onclick="openTab(event, 'construccion')"><i class="fa-solid fa-user-plus"></i> Rastreador</div>
+                <div class="menu-item" onclick="openTab(event, 'construccion')"><i class="fa-solid fa-ticket"></i> Tickets</div>
             </div>
             <div class="menu-section">
                 <span class="menu-header">DIVERSIÓN Y COMUNIDAD</span>
-                <div class="menu-item" onclick="openTab(event, 'construccion')"><i class="fa-solid fa-bell"></i> <span class="link-text">Recordatorios</span></div>
-                <div class="menu-item" onclick="openTab(event, 'construccion')"><i class="fa-solid fa-cake-candles"></i> <span class="link-text">Cumpleaños</span></div>
-                <div class="menu-item" onclick="openTab(event, 'construccion')"><i class="fa-solid fa-gift"></i> <span class="link-text">Sorteos</span></div>
-                <div class="menu-item" onclick="openTab(event, 'construccion')"><i class="fa-solid fa-trophy"></i> <span class="link-text">Niveles y XP</span></div>
-                <div class="menu-item" onclick="openTab(event, 'construccion')"><i class="fa-solid fa-music"></i> <span class="link-text">Música</span></div>
+                <div class="menu-item" onclick="openTab(event, 'construccion')"><i class="fa-solid fa-bell"></i> Recordatorios</div>
+                <div class="menu-item" onclick="openTab(event, 'construccion')"><i class="fa-solid fa-cake-candles"></i> Cumpleaños</div>
+                <div class="menu-item" onclick="openTab(event, 'construccion')"><i class="fa-solid fa-gift"></i> Sorteos</div>
+                <div class="menu-item" onclick="openTab(event, 'construccion')"><i class="fa-solid fa-trophy"></i> Niveles y XP</div>
+                <div class="menu-item" onclick="openTab(event, 'construccion')"><i class="fa-solid fa-music"></i> Música</div>
             </div>
             <div class="menu-section">
                 <span class="menu-header">EXTRAS</span>
-                <div class="menu-item" onclick="openTab(event, 'construccion')"><i class="fa-solid fa-coins"></i> <span class="link-text">Economía</span></div>
-                <div class="menu-item" onclick="openTab(event, 'construccion')"><i class="fa-solid fa-chart-simple"></i> <span class="link-text">Estadísticas</span></div>
-                <div class="menu-item" onclick="openTab(event, 'construccion')"><i class="fa-solid fa-magnifying-glass"></i> <span class="link-text">Buscador</span></div>
-                <div class="menu-item" onclick="openTab(event, 'construccion')"><i class="fa-solid fa-circle-question"></i> <span class="link-text">Ayuda</span></div>
+                <div class="menu-item" onclick="openTab(event, 'construccion')"><i class="fa-solid fa-coins"></i> Economía</div>
+                <div class="menu-item" onclick="openTab(event, 'construccion')"><i class="fa-solid fa-chart-simple"></i> Estadísticas</div>
+                <div class="menu-item" onclick="openTab(event, 'construccion')"><i class="fa-solid fa-magnifying-glass"></i> Buscador</div>
+                <div class="menu-item" onclick="openTab(event, 'construccion')"><i class="fa-solid fa-circle-question"></i> Ayuda</div>
             </div>
             <div class="menu-footer">
-                <a href="/" class="menu-item back-item"><i class="fa-solid fa-arrow-left"></i> <span class="link-text">Volver al Inicio</span></a>
+                <a href="/" class="menu-item back-item"><i class="fa-solid fa-arrow-left"></i> Volver al Inicio</a>
             </div>
         </aside>
 
         <main class="content-area">
             <form id="configForm" action="/save-config" method="POST" enctype="multipart/form-data">
                 <input type="hidden" name="guildId" id="guildIdInput" value="<%= currentServer.id %>">
+
+                <div id="consola" class="tab-content" style="display: none;">
+                    <div class="content-header"><h1>Consola del Sistema</h1><p>Logs en tiempo real del servidor.</p></div>
+                    <div class="terminal-window">
+                        <div class="terminal-header">
+                            <div class="term-btn term-red"></div><div class="term-btn term-yellow"></div><div class="term-btn term-green"></div>
+                            <span class="term-title">root@habbus-server:~</span>
+                        </div>
+                        <div class="terminal-body" id="terminalOutput">
+                            <div class="log-entry">Cargando conexión segura...</div>
+                        </div>
+                    </div>
+                </div>
 
                 <div id="panel" class="tab-content active" style="display: block; opacity: 1;">
                     <div class="content-header"><h1>Panel de Control</h1><p>Gestiona los módulos de <strong><%= currentServer.name %></strong></p></div>
@@ -147,17 +163,11 @@
                         <div class="setting-row" style="align-items: flex-start;">
                             <div class="setting-info" style="flex: 1;">
                                 <div style="margin-bottom: 20px;"><label>Apodo en este Servidor</label><input type="text" name="botNickname" value="<%= config.botNickname || 'Habbus' %>" class="form-input change-detect" placeholder="Ej: Santa Claus"></div>
-                                <div style="margin-bottom: 20px;">
-                                    <label>Avatar del Servidor</label><span class="desc">Sube una imagen (PNG o JPG, máx 8MB).</span>
-                                    <div class="file-input-wrapper">
-                                        <input type="file" id="botAvatarInput" name="botAvatarFile" accept="image/png, image/jpeg, image/jpg" class="hidden-file-input change-detect">
-                                        <label for="botAvatarInput" class="custom-file-btn">
-                                            <i class="fa-solid fa-cloud-arrow-up"></i> <span id="fileNameDisplay">Seleccionar Imagen</span>
-                                        </label>
-                                    </div>
+                                <div style="margin-bottom: 20px;"><label>Avatar del Servidor</label><span class="desc">Sube una imagen (PNG o JPG, máx 8MB).</span>
+                                    <div class="file-input-wrapper"><input type="file" id="botAvatarInput" name="botAvatarFile" accept="image/*" class="hidden-file-input change-detect"><label for="botAvatarInput" class="custom-file-btn"><i class="fa-solid fa-cloud-arrow-up"></i> <span id="fileNameDisplay">Seleccionar Imagen</span></label></div>
                                 </div>
                                 <div style="margin-bottom: 20px;"><label>Estado del Bot</label><select name="botStatus" id="statusSelect" class="form-input change-detect"><option value="online" <%= config.botStatus === 'online' ? 'selected' : '' %>>🟢 En Línea</option><option value="idle" <%= config.botStatus === 'idle' ? 'selected' : '' %>>🌙 Ausente</option><option value="dnd" <%= config.botStatus === 'dnd' ? 'selected' : '' %>>⛔ No Molestar</option><option value="invisible" <%= config.botStatus === 'invisible' ? 'selected' : '' %>>👻 Invisible</option></select></div>
-                                <div style="display: flex; gap: 10px;"><div style="flex: 1;"><label>Tipo Actividad</label><select name="activityType" id="activityTypeSelect" class="form-input change-detect"><option value="0" <%= config.activityType === 0 ? 'selected' : '' %>>Jugando a</option><option value="3" <%= config.activityType === 3 ? 'selected' : '' %>>Viendo</option><option value="2" <%= config.activityType === 2 ? 'selected' : '' %>>Escuchando</option><option value="5" <%= config.activityType === 5 ? 'selected' : '' %>>Compitiendo en</option></select></div><div style="flex: 2;"><label>Texto de Actividad</label><input type="text" name="activityText" id="activityTextInput" value="<%= config.activityText || 'Navidad' %>" class="form-input change-detect"></div></div>
+                                <div style="display: flex; gap: 10px;"><div style="flex: 1;"><label>Tipo</label><select name="activityType" id="activityTypeSelect" class="form-input change-detect"><option value="0" <%= config.activityType === 0 ? 'selected' : '' %>>Jugando a</option><option value="3" <%= config.activityType === 3 ? 'selected' : '' %>>Viendo</option><option value="2" <%= config.activityType === 2 ? 'selected' : '' %>>Escuchando</option><option value="5" <%= config.activityType === 5 ? 'selected' : '' %>>Compitiendo en</option></select></div><div style="flex: 2;"><label>Texto</label><input type="text" name="activityText" id="activityTextInput" value="<%= config.activityText || 'Navidad' %>" class="form-input change-detect"></div></div>
                             </div>
                             <div class="setting-input" style="flex: 0 0 320px; margin-left: 40px;">
                                 <label style="margin-bottom: 10px; display: block;">Vista Previa</label>
@@ -166,7 +176,7 @@
                                         <div class="avatar-wrapper"><img src="<%= config.botAvatar || '/images/logo_navidad.png' %>" alt="Bot" class="bot-avatar-preview" id="previewAvatarImg"><div class="status-indicator" id="previewStatusDot"></div></div>
                                         <div style="display: flex; flex-direction: column;"><div style="display: flex; align-items: center; gap: 5px;"><span class="bot-name-preview"><%= config.botNickname || 'Habbus' %></span><span class="bot-tag">BOT</span></div><span class="activity-preview" id="previewActivity" style="font-size: 0.75rem; color: #b9bbbe;">Jugando a <strong>Navidad</strong></span></div>
                                     </div>
-                                    <div class="discord-embed" id="embedPreview" style="border-left-color: <%= config.embedColor || '#ff0f0f' %>; margin-top: 10px;"><div class="embed-title">Mensaje de Ejemplo</div><div class="embed-desc">¡Hola! Así se ve mi perfil y mis colores en tu servidor.</div></div>
+                                    <div class="discord-embed" id="embedPreview" style="border-left-color: <%= config.embedColor || '#ff0f0f' %>; margin-top: 10px;"><div class="embed-title">Mensaje de Ejemplo</div><div class="embed-desc">¡Hola! Así se ve mi perfil y mis colores.</div></div>
                                 </div>
                                 <div style="margin-top: 20px;"><label>Color del Tema</label><div style="margin-top: 5px; display: flex; align-items: center; gap: 10px;"><input type="color" id="colorPicker" name="embedColor" value="<%= config.embedColor || '#ff0f0f' %>" class="change-detect" style="height: 40px; width: 100%; cursor: pointer; border: none; background: none;"></div></div>
                             </div>
@@ -177,121 +187,34 @@
                 <div id="ajustes" class="tab-content" style="display: none;">
                     <div class="content-header"><h1>Ajustes Generales</h1><p>Configuración esencial del núcleo del bot.</p></div>
                     <div class="settings-card">
-                        
-                        <div class="setting-row">
-                            <div class="setting-info"><label>Prefijo</label></div>
-                            <div class="setting-input"><input type="text" name="prefix" value="<%= config.prefix %>" class="form-input change-detect" style="width: 100px;"></div>
-                        </div>
-                        
-                        <div class="setting-row">
-                            <div class="setting-info"><label>Idioma</label></div>
-                            <div class="setting-input"><select name="language" class="form-input change-detect"><option value="es" <%= config.language === 'es' ? 'selected' : '' %>>🇪🇸 Español</option><option value="en" <%= config.language === 'en' ? 'selected' : '' %>>🇺🇸 English</option></select></div>
-                        </div>
-
-                        <div class="setting-row">
-                            <div class="setting-info"><label>Zona Horaria</label></div>
-                            <div class="setting-input"><select name="timezone" class="form-input change-detect"><option value="America/Bogota" <%= config.timezone === 'America/Bogota' ? 'selected' : '' %>>🇨🇴 Colombia</option><option value="America/Mexico_City" <%= config.timezone === 'America/Mexico_City' ? 'selected' : '' %>>🇲🇽 México</option><option value="Europe/Madrid" <%= config.timezone === 'Europe/Madrid' ? 'selected' : '' %>>🇪🇸 España</option><option value="America/New_York" <%= config.timezone === 'America/New_York' ? 'selected' : '' %>>🇺🇸 USA Este</option></select></div>
-                        </div>
-
-                        <div class="setting-row" style="align-items: center; justify-content: space-between;">
-                            <div class="setting-info"><label>Respuestas Silenciosas</label></div>
-                            <label class="switch"><input type="checkbox" name="ephemeralReplies" class="change-detect" <%= config.ephemeralReplies ? 'checked' : '' %>><span class="slider round"></span></label>
-                        </div>
-
+                        <div class="setting-row"><div class="setting-info"><label>Prefijo</label></div><div class="setting-input"><input type="text" name="prefix" value="<%= config.prefix %>" class="form-input change-detect" style="width: 100px;"></div></div>
+                        <div class="setting-row"><div class="setting-info"><label>Idioma</label></div><div class="setting-input"><select name="language" class="form-input change-detect"><option value="es" <%= config.language === 'es' ? 'selected' : '' %>>🇪🇸 Español</option><option value="en" <%= config.language === 'en' ? 'selected' : '' %>>🇺🇸 English</option></select></div></div>
+                        <div class="setting-row"><div class="setting-info"><label>Zona Horaria</label></div><div class="setting-input"><select name="timezone" class="form-input change-detect"><option value="America/Bogota" <%= config.timezone === 'America/Bogota' ? 'selected' : '' %>>🇨🇴 Colombia</option><option value="America/Mexico_City" <%= config.timezone === 'America/Mexico_City' ? 'selected' : '' %>>🇲🇽 México</option><option value="Europe/Madrid" <%= config.timezone === 'Europe/Madrid' ? 'selected' : '' %>>🇪🇸 España</option><option value="America/New_York" <%= config.timezone === 'America/New_York' ? 'selected' : '' %>>🇺🇸 USA Este</option></select></div></div>
+                        <div class="setting-row" style="align-items: center; justify-content: space-between;"><div class="setting-info"><label>Respuestas Silenciosas</label></div><label class="switch"><input type="checkbox" name="ephemeralReplies" class="change-detect" <%= config.ephemeralReplies ? 'checked' : '' %>><span class="slider round"></span></label></div>
                         <hr class="divider">
-
-                        <div class="setting-row">
-                            <div class="setting-info"><label>Canales Ignorados</label><span class="desc">No responder aquí.</span></div>
-                            <div class="setting-input">
-                                <div class="multiselect-container" id="dd-ignored">
-                                    <div class="select-box" onclick="toggleMultiSelect('dd-ignored')"><span class="selected-text">Seleccionar canales...</span><i class="fa-solid fa-chevron-down"></i></div>
-                                    <div class="options-container">
-                                        <% if(typeof channels !== 'undefined' && channels.length > 0){ channels.forEach(c => { let isChecked = config.ignoredChannels && (Array.isArray(config.ignoredChannels) ? config.ignoredChannels.includes(c.id) : config.ignoredChannels == c.id); %>
-                                            <label class="option-item"><input type="checkbox" name="ignoredChannels" value="<%= c.id %>" <%= isChecked ? 'checked' : '' %> onchange="updateSelectText('dd-ignored')"><span># <%= c.name %></span></label>
-                                        <% }) } else { %><div style="color: #888; padding: 10px;">Sin canales.</div><% } %>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
+                        <div class="setting-row"><div class="setting-info"><label>Canales Ignorados</label><span class="desc">No responder aquí.</span></div><div class="setting-input"><div class="multiselect-container" id="dd-ignored"><div class="select-box" onclick="toggleMultiSelect('dd-ignored')"><span class="selected-text">Seleccionar...</span><i class="fa-solid fa-chevron-down"></i></div><div class="options-container"><% if(typeof channels !== 'undefined' && channels.length > 0){ channels.forEach(c => { let isChecked = config.ignoredChannels && (Array.isArray(config.ignoredChannels) ? config.ignoredChannels.includes(c.id) : config.ignoredChannels == c.id); %><label class="option-item"><input type="checkbox" name="ignoredChannels" value="<%= c.id %>" <%= isChecked ? 'checked' : '' %> onchange="updateSelectText('dd-ignored')"><span># <%= c.name %></span></label><% }) } else { %><div style="color: #888; padding: 10px;">Sin canales.</div><% } %></div></div></div></div>
                         <hr class="divider">
                         <h3>Jerarquía y Permisos</h3>
-                        
-                        <p style="margin-bottom: 25px; color: #b9bbbe; font-size: 0.9rem; line-height: 1.5; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; border-left: 3px solid var(--accent);">
-                            Define qué roles tienen autoridad sobre el bot.<br>
-                            • <strong>Administrador:</strong> Acceso total al panel y configuración.<br>
-                            • <strong>Moderador:</strong> Puede usar comandos de ban, kick y mute.<br>
-                            • <strong>Silenciado:</strong> Rol que se asignará a los usuarios castigados.
-                        </p>
-
-                        <div class="setting-row">
-                            <div class="setting-info"><label>Roles Admin</label><span class="desc">Acceso total.</span></div>
-                            <div class="setting-input">
-                                <div class="multiselect-container" id="dd-admin">
-                                    <div class="select-box" onclick="toggleMultiSelect('dd-admin')"><span class="selected-text">Seleccionar roles...</span><i class="fa-solid fa-chevron-down"></i></div>
-                                    <div class="options-container">
-                                        <% if(typeof roles !== 'undefined' && roles.length > 0){ roles.forEach(r => { let isChecked = config.adminRole && (Array.isArray(config.adminRole) ? config.adminRole.includes(r.id) : config.adminRole == r.id); let textColor = r.color === '#000000' ? '#ddd' : r.color; %>
-                                            <label class="option-item"><input type="checkbox" name="adminRole" value="<%= r.id %>" <%= isChecked ? 'checked' : '' %> onchange="updateSelectText('dd-admin')"><span class="role-dot-small" style="background-color: <%= r.color %>;"></span><span style="color: <%= textColor %>"><%= r.name %></span></label>
-                                        <% }) } else { %><div style="color: #888; padding: 10px;">Sin roles.</div><% } %>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="setting-row">
-                            <div class="setting-info"><label>Roles Moderador</label><span class="desc">Ban, Kick, Mute.</span></div>
-                            <div class="setting-input">
-                                <div class="multiselect-container" id="dd-mod">
-                                    <div class="select-box" onclick="toggleMultiSelect('dd-mod')"><span class="selected-text">Seleccionar roles...</span><i class="fa-solid fa-chevron-down"></i></div>
-                                    <div class="options-container">
-                                        <% if(typeof roles !== 'undefined' && roles.length > 0){ roles.forEach(r => { let isChecked = config.modRole && (Array.isArray(config.modRole) ? config.modRole.includes(r.id) : config.modRole == r.id); let textColor = r.color === '#000000' ? '#ddd' : r.color; %>
-                                            <label class="option-item"><input type="checkbox" name="modRole" value="<%= r.id %>" <%= isChecked ? 'checked' : '' %> onchange="updateSelectText('dd-mod')"><span class="role-dot-small" style="background-color: <%= r.color %>;"></span><span style="color: <%= textColor %>"><%= r.name %></span></label>
-                                        <% }) } %>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="setting-row">
-                            <div class="setting-info"><label>Rol Silenciado</label></div>
-                            <div class="setting-input">
-                                <select name="muteRole" class="form-input change-detect">
-                                    <option value="">-- Único --</option>
-                                    <% if(typeof roles !== 'undefined' && roles.length > 0){ roles.forEach(r=>{ %><option value="<%= r.id %>" <%= config.muteRole===r.id?'selected':'' %> style="color:<%= r.color %>">@<%= r.name %></option><% }) } %>
-                                </select>
-                            </div>
-                        </div>
-
+                        <p style="margin-bottom: 25px; color: #b9bbbe; font-size: 0.9rem; line-height: 1.5; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 8px; border-left: 3px solid var(--accent);">Define qué roles tienen autoridad sobre el bot.<br>• <strong>Administrador:</strong> Acceso total al panel y configuración.<br>• <strong>Moderador:</strong> Puede usar comandos de ban, kick y mute.<br>• <strong>Silenciado:</strong> Rol que se asignará a los usuarios castigados.</p>
+                        <div class="setting-row"><div class="setting-info"><label>Roles Admin</label></div><div class="setting-input"><div class="multiselect-container" id="dd-admin"><div class="select-box" onclick="toggleMultiSelect('dd-admin')"><span class="selected-text">Seleccionar...</span><i class="fa-solid fa-chevron-down"></i></div><div class="options-container"><% if(typeof roles !== 'undefined' && roles.length > 0){ roles.forEach(r => { let isChecked = config.adminRole && (Array.isArray(config.adminRole) ? config.adminRole.includes(r.id) : config.adminRole == r.id); let textColor = r.color === '#000000' ? '#ddd' : r.color; %><label class="option-item"><input type="checkbox" name="adminRole" value="<%= r.id %>" <%= isChecked ? 'checked' : '' %> onchange="updateSelectText('dd-admin')"><span class="role-dot-small" style="background-color: <%= r.color %>;"></span><span style="color: <%= textColor %>"><%= r.name %></span></label><% }) } else { %><div style="color: #888; padding: 10px;">Sin roles.</div><% } %></div></div></div></div>
+                        <div class="setting-row"><div class="setting-info"><label>Roles Moderador</label></div><div class="setting-input"><div class="multiselect-container" id="dd-mod"><div class="select-box" onclick="toggleMultiSelect('dd-mod')"><span class="selected-text">Seleccionar...</span><i class="fa-solid fa-chevron-down"></i></div><div class="options-container"><% if(typeof roles !== 'undefined' && roles.length > 0){ roles.forEach(r => { let isChecked = config.modRole && (Array.isArray(config.modRole) ? config.modRole.includes(r.id) : config.modRole == r.id); let textColor = r.color === '#000000' ? '#ddd' : r.color; %><label class="option-item"><input type="checkbox" name="modRole" value="<%= r.id %>" <%= isChecked ? 'checked' : '' %> onchange="updateSelectText('dd-mod')"><span class="role-dot-small" style="background-color: <%= r.color %>;"></span><span style="color: <%= textColor %>"><%= r.name %></span></label><% }) } %></div></div></div></div>
+                        <div class="setting-row"><div class="setting-info"><label>Rol Silenciado</label></div><div class="setting-input"><select name="muteRole" class="form-input change-detect"><option value="">-- Único --</option><% if(typeof roles !== 'undefined' && roles.length > 0){ roles.forEach(r=>{ %><option value="<%= r.id %>" <%= config.muteRole===r.id?'selected':'' %> style="color:<%= r.color %>">@<%= r.name %></option><% }) } %></select></div></div>
                     </div>
                 </div>
 
                 <div id="bienvenida" class="tab-content" style="display: none;">
                     <div class="content-header"><h1>Sistema de Bienvenida</h1></div>
-                    <div class="settings-card">
-                        <div class="setting-row" style="align-items: center; justify-content: space-between;"><div class="setting-info"><label>Habilitar</label></div><label class="switch"><input type="checkbox" name="welcomeEnabled" class="change-detect" <%= config.welcomeEnabled ? 'checked' : '' %>><span class="slider round"></span></label></div>
-                        <hr class="divider">
-                        <div class="setting-row"><div class="setting-info"><label>Canal</label></div><div class="setting-input"><select name="welcomeChannel" class="form-input change-detect"><option value="" disabled <%= !config.welcomeChannel ? 'selected' : '' %>>Selecciona...</option><% if (typeof channels !== 'undefined' && channels.length > 0) { %><% channels.forEach(ch => { %><option value="<%= ch.id %>" <%= config.welcomeChannel === ch.id ? 'selected' : '' %>># <%= ch.name %></option><% }) %><% } else { %><option value="" disabled>Sin canales</option><% } %></select></div></div>
-                        <div class="setting-row"><div class="setting-info"><label>Mensaje</label></div><div class="setting-input"><textarea name="welcomeMessage" rows="5" class="form-input change-detect"><%= config.welcomeMessage %></textarea></div></div>
-                    </div>
+                    <div class="settings-card"><div class="setting-row"><label>Habilitar</label><input type="checkbox" name="welcomeEnabled" <%= config.welcomeEnabled?'checked':'' %>></div><div class="setting-row"><label>Canal</label><select name="welcomeChannel"><option value="" disabled>Selecciona...</option><% if (typeof channels !== 'undefined' && channels.length > 0) { %><% channels.forEach(ch => { %><option value="<%= ch.id %>" <%= config.welcomeChannel === ch.id ? 'selected' : '' %>># <%= ch.name %></option><% }) %><% } %></select></div><div class="setting-row"><label>Mensaje</label><textarea name="welcomeMessage" rows="5" class="form-input change-detect"><%= config.welcomeMessage %></textarea></div></div>
                 </div>
 
                 <div id="moderacion" class="tab-content" style="display: none;">
                     <div class="content-header"><h1>Moderación</h1></div>
-                    <div class="settings-card">
-                        <div class="setting-row" style="align-items: center; justify-content: space-between;"><div class="setting-info"><label style="color:#ff5555;">Anti-Malas Palabras</label></div><label class="switch"><input type="checkbox" name="automodBadWords" class="change-detect" <%= config.automodBadWords ? 'checked' : '' %>><span class="slider round"></span></label></div>
-                        <hr class="divider">
-                        <div class="setting-row" style="align-items: center; justify-content: space-between;"><div class="setting-info"><label style="color:#5865F2;">Anti-Links</label></div><label class="switch"><input type="checkbox" name="automodLinks" class="change-detect" <%= config.automodLinks ? 'checked' : '' %>><span class="slider round"></span></label></div>
-                    </div>
+                    <div class="settings-card"><div class="setting-row"><label>Anti-Malas Palabras</label><input type="checkbox" name="automodBadWords" <%= config.automodBadWords?'checked':'' %>></div><div class="setting-row"><label>Anti-Links</label><input type="checkbox" name="automodLinks" <%= config.automodLinks?'checked':'' %>></div></div>
                 </div>
 
                 <div id="registros" class="tab-content" style="display: none;">
                     <div class="content-header"><h1>Registros</h1></div>
-                    <div class="settings-card">
-                        <div class="setting-row"><div class="setting-info"><label>Canal Logs</label></div><div class="setting-input"><select name="logChannel" class="form-input change-detect"><option value="" disabled <%= !config.logChannel ? 'selected' : '' %>>Selecciona...</option><% if(typeof channels!=='undefined'){ channels.forEach(c=>{ %><option value="<%= c.id %>" <%= config.logChannel===c.id?'selected':'' %>># <%= c.name %></option><% }) } %></select></div></div>
-                        <hr class="divider">
-                        <div class="setting-row" style="align-items: center; justify-content: space-between;"><div class="setting-info"><label>Mensajes Borrados</label></div><label class="switch"><input type="checkbox" name="logMessages" class="change-detect" <%= config.logMessages ? 'checked' : '' %>><span class="slider round"></span></label></div>
-                        <div class="setting-row" style="align-items: center; justify-content: space-between; margin-top:15px;"><div class="setting-info"><label>Entradas/Salidas</label></div><label class="switch"><input type="checkbox" name="logMembers" class="change-detect" <%= config.logMembers ? 'checked' : '' %>><span class="slider round"></span></label></div>
-                    </div>
+                    <div class="settings-card"><div class="setting-row"><label>Canal Logs</label><select name="logChannel"><option value="" disabled>Selecciona...</option><% if(typeof channels!=='undefined'){ channels.forEach(c=>{ %><option value="<%= c.id %>" <%= config.logChannel===c.id?'selected':'' %>># <%= c.name %></option><% }) } %></select></div><div class="setting-row"><label>Mensajes Borrados</label><input type="checkbox" name="logMessages" <%= config.logMessages?'checked':'' %>></div><div class="setting-row"><label>Entradas/Salidas</label><input type="checkbox" name="logMembers" <%= config.logMembers?'checked':'' %>></div></div>
                 </div>
 
                 <div id="construccion" class="tab-content" style="display: none; text-align: center; padding-top: 50px;"><i class="fa-solid fa-person-digging" style="font-size: 4rem; color: rgba(255,255,255,0.2); margin-bottom: 20px;"></i><h2>Próximamente</h2></div>
@@ -303,43 +226,47 @@
         </main>
     </div>
 
-    <div id="successToast" class="success-toast"><i class="fa-solid fa-check-circle"></i> Guardado correctamente</div>
+    <div id="successToast" class="success-toast"><i class="fa-solid fa-check-circle"></i> Guardado</div>
 
     <script>
-        // TABS
-        function openTab(evt, tabName) { 
-            document.querySelectorAll('.tab-content').forEach(d => {d.style.display='none'; d.style.opacity='0';});
-            document.querySelectorAll('.menu-item').forEach(i => i.classList.remove('active'));
-            const sel = document.getElementById(tabName);
-            if(sel) { sel.style.display='block'; setTimeout(()=>sel.style.opacity='1', 10); }
-            if(evt) evt.currentTarget.classList.add('active');
+        let logsInterval = null;
+
+        function openTab(evt,name){
+            document.querySelectorAll('.tab-content').forEach(d=>{d.style.display='none';d.style.opacity='0';});
+            const s=document.getElementById(name);s.style.display='block';setTimeout(()=>s.style.opacity='1',10);
+            if(evt) { document.querySelectorAll('.menu-item').forEach(i=>i.classList.remove('active')); evt.currentTarget.classList.add('active'); }
+            
+            if(name === 'consola') {
+                fetchLogs();
+                if(!logsInterval) logsInterval = setInterval(fetchLogs, 2000);
+            } else {
+                if(logsInterval) { clearInterval(logsInterval); logsInterval = null; }
+            }
         }
 
-        document.getElementById('sidebarToggle').addEventListener('click', () => document.getElementById('sidebar').classList.toggle('collapsed'));
-        
-        const serverMenu = document.getElementById('serverMenu');
-        function toggleServerMenu() { serverMenu.classList.toggle('show'); }
-        function selectServer(id) { window.location.href = '/dashboard?guild=' + id; }
-        window.onclick = e => { if(!e.target.closest('.server-dropdown-container')) serverMenu.classList.remove('show'); };
-        
-        const form=document.getElementById('configForm'), saveBar=document.getElementById('saveBar');
-        // Fix de barra: Solo mostrar si el usuario cambia algo
-        form.addEventListener('change',()=>saveBar.classList.add('show'));
-        form.addEventListener('input',()=>saveBar.classList.add('show'));
+        function fetchLogs() {
+            fetch('/api/logs').then(r => r.json()).then(data => {
+                const term = document.getElementById('terminalOutput');
+                term.innerHTML = data.map(l => `<div class="log-entry"><span class="log-time">[${l.time}]</span><span class="${l.type==='error'?'log-error':'log-info'}">${l.msg}</span></div>`).join('');
+                term.scrollTop = term.scrollHeight;
+            }).catch(console.error);
+        }
 
-        // Visibilidad inicial
+        function selectServer(id){window.location.href='/dashboard?guild='+id;}
+        function toggleServerMenu(){document.getElementById('serverMenu').classList.toggle('show');}
+        
+        // --- VISIBILIDAD INICIAL & DROPDOWNS ---
         window.onload = function() { 
             const p = document.getElementById('panel'); if(p) { p.style.display='block'; setTimeout(()=>p.style.opacity='1', 10); } 
             updateSelectText('dd-ignored'); updateSelectText('dd-admin'); updateSelectText('dd-mod');
         };
 
-        // MultiSelect Logic
+        // --- LÓGICA DROPDOWNS MULTI ---
         function toggleMultiSelect(id) {
             const container = document.getElementById(id);
             const box = container.querySelector('.select-box');
             const opts = container.querySelector('.options-container');
             document.querySelectorAll('.options-container').forEach(el => { if(el!==opts) el.classList.remove('show'); });
-            document.querySelectorAll('.select-box').forEach(el => { if(el!==box) el.classList.remove('active'); });
             opts.classList.toggle('show'); box.classList.toggle('active');
         }
         function updateSelectText(id) {
@@ -357,20 +284,15 @@
             if(!event.target.closest('.server-dropdown-container')) document.getElementById('serverMenu').classList.remove('show');
         }
 
-        // File Input Text
-        const botAvatarInput = document.getElementById('botAvatarInput');
-        if(botAvatarInput) botAvatarInput.addEventListener('change', (e) => { 
-            const file = e.target.files[0]; 
-            if(file) document.getElementById('fileNameDisplay').textContent = file.name; 
-        });
+        const form=document.getElementById('configForm'), saveBar=document.getElementById('saveBar');
+        form.addEventListener('change',()=>saveBar.classList.add('show'));
+        form.addEventListener('input',()=>saveBar.classList.add('show'));
 
-        // Personalizador Preview
-        const colorPicker = document.getElementById('colorPicker'), embedPreview = document.getElementById('embedPreview'), botNicknameInput = document.querySelector('input[name="botNickname"]'), botNamePreview = document.querySelector('.bot-name-preview'), previewAvatarImg = document.getElementById('previewAvatarImg'), statusSelect = document.getElementById('statusSelect'), previewStatusDot = document.getElementById('previewStatusDot'), activityTypeSelect = document.getElementById('activityTypeSelect'), activityTextInput = document.getElementById('activityTextInput'), previewActivity = document.getElementById('previewActivity');
+        // Personalizador
+        const colorPicker = document.getElementById('colorPicker'), embedPreview = document.getElementById('embedPreview'), botNicknameInput = document.querySelector('input[name="botNickname"]'), botNamePreview = document.querySelector('.bot-name-preview'), botAvatarInput = document.getElementById('botAvatarInput'), previewAvatarImg = document.getElementById('previewAvatarImg');
         if(colorPicker) colorPicker.addEventListener('input', (e) => embedPreview.style.borderLeftColor = e.target.value);
         if(botNicknameInput) botNicknameInput.addEventListener('input', (e) => botNamePreview.textContent = e.target.value || "Habbus");
-        if(botAvatarInput) botAvatarInput.addEventListener('change', (e) => { const file = e.target.files[0]; if (file) { const reader = new FileReader(); reader.onload = function(e) { previewAvatarImg.src = e.target.result; }; reader.readAsDataURL(file); } });
-        function updateStatusPreview() { const typeMap = { "0": "Jugando a", "2": "Escuchando", "3": "Viendo", "5": "Compitiendo en" }; const typeText = typeMap[activityTypeSelect.value] || ""; const text = activityTextInput.value; previewActivity.innerHTML = `${typeText} <strong>${text}</strong>`; const statusColors = { "online": "#43b581", "idle": "#faa61a", "dnd": "#f04747", "invisible": "#747f8d" }; previewStatusDot.style.backgroundColor = statusColors[statusSelect.value] || "#43b581"; }
-        if(statusSelect && activityTypeSelect && activityTextInput) { statusSelect.addEventListener('change', updateStatusPreview); activityTypeSelect.addEventListener('change', updateStatusPreview); activityTextInput.addEventListener('input', updateStatusPreview); updateStatusPreview(); }
+        if(botAvatarInput) botAvatarInput.addEventListener('change', (e) => { const file = e.target.files[0]; if (file) { document.getElementById('fileNameDisplay').textContent = file.name; const reader = new FileReader(); reader.onload = function(e) { previewAvatarImg.src = e.target.result; }; reader.readAsDataURL(file); } });
 
         form.addEventListener('submit', e => {
             e.preventDefault(); const fd=new FormData(form);

@@ -467,6 +467,53 @@ input:checked + .slider:before { transform: translateX(24px); }
 }
 .success-toast.active { transform: translateX(-50%) translateY(0); opacity: 1; }
 
+/* --- DISEÑO DE CONSOLA HACKER --- */
+.terminal-window {
+    background-color: #0c0c0c;
+    border: 1px solid #333;
+    border-radius: 8px;
+    height: 500px;
+    font-family: 'Fira Code', monospace;
+    font-size: 0.9rem;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+.terminal-header {
+    background-color: #1f1f1f;
+    padding: 8px 15px;
+    border-bottom: 1px solid #333;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.term-btn {
+    width: 12px; height: 12px; border-radius: 50%;
+}
+.term-red { background: #ff5f56; }
+.term-yellow { background: #ffbd2e; }
+.term-green { background: #27c93f; }
+.term-title { margin-left: 10px; color: #aaa; font-size: 0.8rem; }
+
+.terminal-body {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+    color: #e0e0e0;
+}
+
+/* Scrollbar de la terminal */
+.terminal-body::-webkit-scrollbar { width: 8px; }
+.terminal-body::-webkit-scrollbar-thumb { background: #444; border-radius: 4px; }
+.terminal-body::-webkit-scrollbar-track { background: #0c0c0c; }
+
+.log-entry { margin-bottom: 4px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 2px; }
+.log-time { color: #666; margin-right: 10px; }
+.log-info { color: #43b581; }
+.log-error { color: #ff5555; }
+
 /* --- NIEVE --- */
 .snow-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 1; pointer-events: none; overflow: hidden; }
 .snow { position: absolute; top: -10px; background: white; border-radius: 50%; opacity: 0.8; filter: blur(1px); animation: fall linear infinite; }
